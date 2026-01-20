@@ -12,16 +12,7 @@ const hasValidPrivyId = PRIVY_APP_ID && PRIVY_APP_ID !== 'YOUR_PRIVY_APP_ID'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     {hasValidPrivyId ? (
-      <PrivyProvider
-        appId={PRIVY_APP_ID}
-        config={{
-          loginMethods: ['email', 'google', 'twitter', 'wallet'],
-          appearance: {
-            theme: 'dark',
-            accentColor: '#22c55e',
-          },
-        }}
-      >
+      <PrivyProvider appId={PRIVY_APP_ID}>
         <App privyEnabled={true} />
       </PrivyProvider>
     ) : (
