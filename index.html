@@ -487,11 +487,10 @@
                 position: sticky;
                 top: 0;
                 z-index: 100;
-                padding: 16px 0;
-                margin: 0 -16px;
-                padding-left: 16px;
-                padding-right: 16px;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+                background: #f5f7fa;
+                padding: 16px;
+                margin: -30px -16px 20px -16px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             }
 
             .sticky-header .section-title {
@@ -499,9 +498,21 @@
                 margin-bottom: 12px;
             }
 
+            .sticky-header .progress-container {
+                flex-direction: row;
+                gap: 12px;
+                margin-bottom: 0;
+            }
+
+            .sticky-header .progress-bar-wrapper {
+                flex: 1;
+                max-width: none;
+            }
+
             .progress-text {
                 font-size: 0.75rem;
                 text-align: center;
+                white-space: nowrap;
             }
 
             .matches-container {
