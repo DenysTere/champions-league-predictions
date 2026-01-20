@@ -25,7 +25,15 @@ const matches = [
 ]
 
 function AppWithPrivy() {
-  const { login } = usePrivy()
+  const { login, authenticated } = usePrivy()
+
+  // Redirect to limitless.exchange after successful login
+  useEffect(() => {
+    if (authenticated) {
+      window.location.href = 'https://limitless.exchange/pro/cat/football-matches'
+    }
+  }, [authenticated])
+
   return <AppContent onLogin={login} />
 }
 
