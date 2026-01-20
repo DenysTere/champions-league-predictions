@@ -7,19 +7,25 @@ import App from './App.jsx'
 // Replace with your Privy App ID from https://dashboard.privy.io
 const PRIVY_APP_ID = 'YOUR_PRIVY_APP_ID'
 
+const hasValidPrivyId = PRIVY_APP_ID && PRIVY_APP_ID !== 'YOUR_PRIVY_APP_ID'
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <PrivyProvider
-      appId={PRIVY_APP_ID}
-      config={{
-        loginMethods: ['email', 'wallet', 'google', 'twitter'],
-        appearance: {
-          theme: 'dark',
-          accentColor: '#22c55e',
-        },
-      }}
-    >
-      <App />
-    </PrivyProvider>
+    {hasValidPrivyId ? (
+      <PrivyProvider
+        appId={PRIVY_APP_ID}
+        config={{
+          loginMethods: ['email', 'wallet', 'google', 'twitter'],
+          appearance: {
+            theme: 'dark',
+            accentColor: '#22c55e',
+          },
+        }}
+      >
+        <App privyEnabled={true} />
+      </PrivyProvider>
+    ) : (
+      <App privyEnabled={false} />
+    )}
   </StrictMode>,
 )

@@ -24,8 +24,26 @@ const matches = [
   { id: 18, home: { name: "Porto", abbr: "POR", logo: "https://media.api-sports.io/football/teams/212.png" }, away: { name: "Slavia Praha", abbr: "SLA", logo: "https://tmssl.akamaized.net/images/wappen/head/62.png" } },
 ]
 
-function App() {
-  const { login, authenticated, user } = usePrivy()
+function AppWithPrivy() {
+  const { login } = usePrivy()
+  return <AppContent onLogin={login} />
+}
+
+function AppWithoutPrivy() {
+  const handleLogin = () => {
+    alert('Privy App ID not configured. Please set your App ID in main.jsx')
+  }
+  return <AppContent onLogin={handleLogin} />
+}
+
+function App({ privyEnabled = true }) {
+  if (privyEnabled) {
+    return <AppWithPrivy />
+  }
+  return <AppWithoutPrivy />
+}
+
+function AppContent({ onLogin }) {
   const [predictions, setPredictions] = useState({})
 
   // Load saved predictions on mount
@@ -52,7 +70,7 @@ function App() {
   }
 
   const handleSubmit = () => {
-    login()
+    onLogin()
   }
 
   const predictionsCount = Object.keys(predictions).length
