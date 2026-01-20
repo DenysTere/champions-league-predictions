@@ -1,0 +1,25 @@
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { PrivyProvider } from '@privy-io/react-auth'
+import './index.css'
+import App from './App.jsx'
+
+// Replace with your Privy App ID from https://dashboard.privy.io
+const PRIVY_APP_ID = 'YOUR_PRIVY_APP_ID'
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <PrivyProvider
+      appId={PRIVY_APP_ID}
+      config={{
+        loginMethods: ['email', 'wallet', 'google', 'twitter'],
+        appearance: {
+          theme: 'dark',
+          accentColor: '#22c55e',
+        },
+      }}
+    >
+      <App />
+    </PrivyProvider>
+  </StrictMode>,
+)
