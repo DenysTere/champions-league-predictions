@@ -21,7 +21,7 @@ const matches = [
   { id: 15, home: { name: "Monaco", abbr: "MON", logo: "https://media.api-sports.io/football/teams/91.png" }, away: { name: "Juventus", abbr: "JUV", logo: "https://media.api-sports.io/football/teams/496.png" } },
   { id: 16, home: { name: "Union SG", abbr: "USG", logo: "https://champion-selector--yevhenleibov.replit.app/assets/image_1768916766302-CDgxxO57.png" }, away: { name: "Atalanta", abbr: "ATA", logo: "https://media.api-sports.io/football/teams/499.png" } },
   { id: 17, home: { name: "Athletic Bilbao", abbr: "ATH", logo: "https://media.api-sports.io/football/teams/531.png" }, away: { name: "Sporting CP", abbr: "SCP", logo: "https://media.api-sports.io/football/teams/228.png" } },
-  { id: 18, home: { name: "Porto", abbr: "POR", logo: "https://media.api-sports.io/football/teams/212.png" }, away: { name: "Slavia Praha", abbr: "SLA", logo: "https://tmssl.akamaized.net/images/wappen/head/62.png" } },
+  { id: 18, home: { name: "Pafos", abbr: "PAF", logo: "https://champion-selector--yevhenleibov.replit.app/assets/image_1768916885481-CH0EPYxX.png" }, away: { name: "Slavia Praha", abbr: "SLA", logo: "https://tmssl.akamaized.net/images/wappen/head/62.png" } },
 ]
 
 function AppWithPrivy() {
