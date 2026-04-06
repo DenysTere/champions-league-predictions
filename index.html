@@ -1,330 +1,2141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Champions League Predictions | Limitless Exchange</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>UCL Bracket Challenge</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f7fa;
-            min-height: 100vh;
-            color: #1e293b;
-        }
+  :root {
+    --bg: #071064;
+    --surface: rgba(255,255,255,0.07);
+    --surface2: rgba(255,255,255,0.12);
+    --border: rgba(120,170,255,0.22);
+    --border-act: rgba(120,210,255,0.55);
+    --blue: #3b82f6;
+    --cyan: #38d9f5;
+    --text: #e8f0ff;
+    --text-dim: #7a9fd4;
+    --win: rgba(56,217,245,0.12);
+    --win-border: #38d9f5;
+    --line: rgba(120,170,255,0.35);
+    --gold: #fbbf24;
+  }
 
-        /* Header Section */
-        .header {
-            background: url('bg.avif') center center / cover no-repeat;
-            padding: 60px 80px;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 120px;
-            min-height: 200px;
-        }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(15, 25, 45, 0.85) 0%, rgba(10, 20, 40, 0.7) 100%);
-        }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: radial-gradient(ellipse at 50% 30%, #0d2099 0%, #071064 45%, #030a3a 100%);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: auto;
+    position: relative;
+  }
 
-        .header-content {
-            position: relative;
-            z-index: 1;
-        }
+  /* ── Starball backgrounds ── */
+  .starball-bg {
+    position: fixed; right: -12vw; top: -8vh;
+    width: 72vw; height: 72vw;
+    max-width: 900px; max-height: 900px;
+    opacity: 0.10; pointer-events: none; z-index: 0;
+    filter: blur(0.5px);
+  }
+  .starball-bg2 {
+    position: fixed; left: -18vw; bottom: -18vh;
+    width: 55vw; height: 55vw;
+    max-width: 700px; max-height: 700px;
+    opacity: 0.06; pointer-events: none; z-index: 0;
+    filter: blur(1px); transform: rotate(22deg);
+  }
 
-        .header-content h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
-            color: #ffffff;
-            line-height: 1.15;
-            margin-bottom: 12px;
-        }
+  .page { position: relative; z-index: 1; }
 
-        .header-content .subtitle {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 1rem;
-            margin-bottom: 10px;
-        }
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    padding: 28px 24px 14px;
+  }
+  .ucl-badge {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid var(--border-act);
+    border-radius: 100px; padding: 6px 16px 6px 10px;
+    margin-bottom: 12px;
+    backdrop-filter: blur(8px);
+  }
+  .ucl-stars { font-size: 13px; letter-spacing: 2px; color: var(--cyan); }
+  .ucl-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; color: var(--cyan); text-transform: uppercase; }
+  .header h1 {
+    font-size: clamp(24px, 4vw, 38px); font-weight: 900;
+    letter-spacing: -0.5px; margin-bottom: 4px;
+  }
+  .header h1 span {
+    background: linear-gradient(90deg, var(--cyan), var(--blue));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .header p { font-size: 13px; color: var(--text-dim); }
+  .prize-banner {
+    display: inline-flex; flex-direction: column; align-items: center;
+    margin-top: 14px; padding: 16px 40px;
+    background: rgba(22,35,120,0.6);
+    border: 2px solid rgba(120,160,255,0.2);
+    border-radius: 14px;
+  }
+  .prize-amount {
+    font-size: clamp(19px, 5vw, 27px); font-weight: 900; letter-spacing: 1px;
+    color: #fbbf24 !important;
+    -webkit-text-fill-color: #fbbf24 !important;
+    line-height: 1.1;
+  }
+  .prize-label {
+    font-size: 13px; font-weight: 700; letter-spacing: 3px;
+    text-transform: uppercase; color: rgba(251,191,36,0.7);
+  }
 
-        .header-content .prize-pool {
-            color: #22c55e;
-            font-size: 2.2rem;
-            margin-bottom: 24px;
-            letter-spacing: 0.02em;
-        }
+  /* ── How It Works ── */
+  .how-it-works {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0; padding: 14px 24px 6px;
+    max-width: 640px; margin: 0 auto;
+  }
+  .step {
+    display: flex; align-items: center; gap: 8px;
+    padding: 0 12px;
+  }
+  .step-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(56,217,245,0.15); border: 1px solid rgba(56,217,245,0.35);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; color: var(--cyan);
+    flex-shrink: 0;
+  }
+  .step-text {
+    font-size: 11px; font-weight: 500; color: var(--text-dim);
+    white-space: nowrap;
+  }
+  .step-divider {
+    width: 20px; height: 1px;
+    background: rgba(120,170,255,0.2);
+    flex-shrink: 0;
+  }
 
-        .header-content .prize-pool strong {
-            font-weight: 700;
-            font-size: 2.6rem;
-        }
+  /* ── Progress ── */
+  .progress-wrap { padding: 10px 40px 0; display: flex; gap: 5px; max-width: 420px; margin: 0 auto; }
+  .progress-seg {
+    flex: 1; height: 3px; border-radius: 99px;
+    background: rgba(255,255,255,0.1); transition: background .4s;
+  }
+  .progress-seg.done { background: linear-gradient(90deg, var(--cyan), var(--blue)); }
 
-        /* Challenge Finished Banner */
-        .finished-banner {
-            max-width: 720px;
-            margin: 0 auto;
-            padding: 60px 20px;
-            text-align: center;
-        }
+  /* ── Trophy Section ── */
+  .trophy-section {
+    text-align: center;
+    padding: 18px 0 4px;
+  }
+  .trophy-container {
+    display: inline-flex; flex-direction: column;
+    align-items: center; gap: 6px;
+  }
+  .trophy-area {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .trophy-svg {
+    width: 120px; height: 150px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 16px rgba(200,180,100,0.25));
+    transition: filter .6s, transform .6s;
+  }
+  .champ-logo {
+    position: absolute;
+    bottom: -8px;
+    width: 52px; height: 52px;
+    object-fit: contain;
+    border-radius: 50%;
+    background: rgba(7,16,100,0.85);
+    border: 2px solid rgba(251,191,36,0.5);
+    padding: 6px;
+    box-shadow: 0 0 20px rgba(251,191,36,0.3), 0 4px 12px rgba(0,0,0,0.4);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity .5s, transform .5s;
+    pointer-events: none;
+  }
+  .champ-logo.visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .trophy-svg.crowned {
+    transform: scale(1.1);
+    animation: trophy-glow 2.5s ease-in-out infinite;
+  }
+  @keyframes trophy-glow {
+    0%, 100% { filter: drop-shadow(0 0 30px rgba(251,191,36,0.6)) drop-shadow(0 0 60px rgba(200,170,50,0.3)); }
+    50% { filter: drop-shadow(0 0 45px rgba(251,191,36,0.8)) drop-shadow(0 0 80px rgba(200,170,50,0.5)); }
+  }
+  .champ-label {
+    font-size: 8px; font-weight: 700; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--text-dim);
+  }
+  .champ-name {
+    font-size: 20px; font-weight: 900;
+    min-height: 26px;
+    color: var(--text-dim);
+    transition: all .4s;
+  }
+  .champ-name.active {
+    background: linear-gradient(90deg, var(--gold), #f59e0b, var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
 
-        .finished-badge {
-            display: inline-block;
-            background: rgba(34, 197, 94, 0.12);
-            color: #22c55e;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            padding: 6px 16px;
-            border-radius: 20px;
-            margin-bottom: 24px;
-        }
+  /* ── Round Labels ── */
+  .round-labels {
+    display: flex; justify-content: center; align-items: flex-end;
+    padding: 14px 16px 0;
+    max-width: 1060px; margin: 0 auto;
+  }
+  .round-label {
+    text-align: center;
+    font-size: 9px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: rgba(120,170,255,0.3);
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(120,170,255,0.12);
+    transition: color .3s, border-color .3s;
+  }
+  .round-label.active { color: var(--cyan); border-bottom-color: var(--cyan); }
+  .rl-qf { width: 200px; }
+  .rl-conn { width: 44px; border-bottom: none !important; color: transparent !important; }
+  .rl-sf { width: 200px; }
+  .rl-final { width: 210px; }
 
-        .finished-banner h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 16px;
-        }
+  /* ── Bracket ── */
+  .bracket-outer { padding: 0 16px 30px; overflow-x: auto; }
+  .bracket {
+    display: flex; align-items: center; justify-content: center;
+    min-width: 960px; padding: 20px 0;
+  }
 
-        .finished-banner p {
-            color: #64748b;
-            font-size: 1.05rem;
-            line-height: 1.7;
-            max-width: 520px;
-            margin: 0 auto 20px;
-        }
+  .bracket-half { display: flex; align-items: center; }
 
-        .finished-banner .highlight {
-            color: #1e293b;
-            font-weight: 600;
-        }
+  .qf-group {
+    display: flex; align-items: stretch;
+    height: 320px;
+  }
 
-        .finished-divider {
-            width: 60px;
-            height: 3px;
-            background: #22c55e;
-            border-radius: 2px;
-            margin: 28px auto;
-        }
+  .qf-col {
+    width: 200px;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+  }
 
-        .finished-note {
-            color: #94a3b8;
-            font-size: 0.85rem;
-        }
+  .sf-col { width: 200px; }
+  .final-col { width: 210px; }
 
-        @media (max-width: 600px) {
-            .finished-banner {
-                padding: 40px 16px;
-            }
+  .conn-merge { flex-shrink: 0; display: block; }
+  .conn-line { flex-shrink: 0; display: block; }
 
-            .finished-banner h2 {
-                font-size: 1.5rem;
-            }
+  /* ── Hint animation ── */
+  .match.hint-pulse {
+    animation: matchPulse 2s ease-in-out infinite;
+    position: relative;
+  }
+  @keyframes matchPulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(0,0,0,0.25), 0 0 0 0 rgba(56,217,245,0); }
+    50% { box-shadow: 0 4px 20px rgba(0,0,0,0.25), 0 0 18px 3px rgba(56,217,245,0.25); }
+  }
+  .match.hint-pulse .team { animation: rowShimmer 2s ease-in-out infinite; }
+  @keyframes rowShimmer {
+    0%, 100% { background: transparent; }
+    50% { background: rgba(56,217,245,0.04); }
+  }
 
-            .finished-banner p {
-                font-size: 0.95rem;
-            }
-        }
+  /* Floating tap hint */
+  .tap-hint {
+    position: absolute;
+    top: -32px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--cyan);
+    color: #071064;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+    padding: 4px 12px; border-radius: 6px;
+    white-space: nowrap;
+    animation: hintBounce 1.8s ease-in-out infinite;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .tap-hint::after {
+    content: '';
+    position: absolute;
+    bottom: -5px; left: 50%; transform: translateX(-50%);
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid var(--cyan);
+  }
+  @keyframes hintBounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-5px); }
+  }
 
-        /* Info Card */
-        .info-card {
-            background: rgba(30, 45, 70, 0.95);
-            border-radius: 12px;
-            padding: 24px 28px;
-            position: relative;
-            z-index: 1;
-            min-width: 300px;
-            backdrop-filter: blur(10px);
-        }
+  /* Hand pointer cursor animation on hinted matches */
+  .match.hint-pulse .team { cursor: pointer; }
 
-        .info-card h3 {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 16px;
-        }
+  /* ── Match ── */
+  .match {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+    position: relative;
+  }
+  .match.final-match {
+    border-color: var(--border-act);
+    box-shadow: 0 4px 32px rgba(0,0,0,0.3), 0 0 24px rgba(56,217,245,0.1);
+  }
 
-        .info-card .label {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 12px;
-        }
+  .team {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 14px; cursor: pointer;
+    transition: background .15s;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .team:last-child { border-bottom: none; }
+  .team:hover { background: var(--surface2); }
 
-        .info-card ul {
-            list-style: none;
-        }
+  .team.winner {
+    background: var(--win);
+    border-left: 3px solid var(--win-border);
+  }
+  .team.winner .team-name { color: var(--cyan); font-weight: 700; }
+  .team.loser { opacity: .32; }
+  .team.tbd { opacity: .4; cursor: default; }
+  .team.tbd:hover { background: transparent; }
 
-        .info-card li {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 5px 0;
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.8);
-        }
+  .team-logo {
+    width: 32px; height: 32px; object-fit: contain;
+    flex-shrink: 0; border-radius: 2px;
+  }
+  .team-logo-placeholder {
+    width: 32px; height: 32px; flex-shrink: 0;
+    border-radius: 50%;
+    border: 1.5px dashed rgba(120,170,255,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: var(--text-dim);
+  }
+  .team-name {
+    font-size: 14px; font-weight: 600; flex: 1;
+    color: var(--text); white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .pick-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--cyan); flex-shrink: 0; display: none;
+    box-shadow: 0 0 8px var(--cyan);
+  }
+  .team.winner .pick-dot { display: block; }
 
-        .info-card .check-circle {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: #22c55e;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            color: white;
-            flex-shrink: 0;
-        }
+  /* Undo hint on hover */
+  .team.winner::after {
+    content: '\00d7';
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    width: 20px; height: 20px; border-radius: 50%;
+    background: rgba(255,77,109,0.15);
+    color: #ff4d6d;
+    font-size: 14px; font-weight: 700; line-height: 20px; text-align: center;
+    opacity: 0; transition: opacity .15s;
+    pointer-events: none;
+  }
+  .team.winner:hover::after { opacity: 1; }
 
-        /* Main Content */
-        .main-content {
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 50px 20px;
-        }
+  /* Locked bracket after submit */
+  .bracket.locked .team {
+    pointer-events: none;
+  }
+  .bracket.locked .team.winner::after { display: none; }
 
-        /* Footer Section */
-        .footer-section {
-            text-align: center;
-            padding: 35px 20px;
-        }
+  /* ── Right side mirroring ── */
+  .right-side .team { flex-direction: row-reverse; }
+  .right-side .team-name { text-align: right; }
+  .right-side .team.winner {
+    border-left: none;
+    border-right: 3px solid var(--win-border);
+  }
+  .right-side .team.winner::after {
+    right: auto; left: 8px;
+  }
 
-        .powered-by {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #e2e8f0;
-            color: #94a3b8;
-            font-size: 0.8rem;
-        }
+  /* ── Form ── */
+  .divider { height: 1px; background: var(--border); margin: 0 24px; }
+  .form-section { max-width: 480px; margin: 0 auto; padding: 0 24px 60px; display: none; }
+  .form-section.visible { display: block; }
+  .form-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .form-card h2 { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+  .form-card h2 span {
+    background: linear-gradient(90deg, var(--cyan), var(--blue));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .form-card p { font-size: 13px; color: var(--text-dim); margin-bottom: 20px; }
+  .form-card p strong { color: var(--cyan); -webkit-text-fill-color: var(--cyan); }
 
-        .powered-by a {
-            color: #64748b;
-            text-decoration: none;
-            font-weight: 500;
-        }
+  .form-notice {
+    display: flex; gap: 10px; align-items: flex-start;
+    background: rgba(56,217,245,0.06);
+    border: 1px solid rgba(56,217,245,0.18);
+    border-radius: 10px; padding: 12px 14px;
+    margin-bottom: 20px;
+  }
+  .form-notice-icon {
+    width: 18px; height: 18px; flex-shrink: 0;
+    color: var(--cyan); margin-top: 1px;
+  }
+  .form-notice span {
+    font-size: 12px; line-height: 1.5;
+    color: var(--text-dim);
+  }
+  .form-notice strong { color: var(--cyan); }
 
-        .powered-by a:hover {
-            text-decoration: underline;
-        }
+  .field-hint {
+    display: block; margin-top: 5px;
+    font-size: 11px; color: rgba(120,170,255,0.4);
+  }
 
-        /* Responsive */
-        @media (max-width: 900px) {
-            .header {
-                flex-direction: column;
-                padding: 40px 30px;
-                gap: 30px;
-                text-align: center;
-            }
+  .form-or {
+    display: flex; align-items: center; gap: 12px;
+    margin: 4px 0 16px;
+  }
+  .form-or-line {
+    flex: 1; height: 1px;
+    background: rgba(120,170,255,0.15);
+  }
+  .form-or-text {
+    font-size: 11px; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; color: rgba(120,170,255,0.35);
+  }
 
-            .info-card {
-                min-width: auto;
-                width: 100%;
-                max-width: 350px;
-            }
-        }
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block; font-size: 11px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--text-dim); margin-bottom: 7px;
+  }
+  .form-group input {
+    width: 100%; background: rgba(0,0,0,0.25);
+    border: 1.5px solid var(--border);
+    border-radius: 9px; padding: 12px 14px;
+    font-size: 14px; font-weight: 500; color: var(--text);
+    outline: none; transition: border-color .2s; font-family: inherit;
+  }
+  .form-group input:focus { border-color: var(--cyan); }
+  .form-group input::placeholder { color: var(--text-dim); }
+  .submit-btn {
+    width: 100%; margin-top: 8px;
+    background: linear-gradient(135deg, #0a6edb, var(--cyan));
+    border: none; border-radius: 10px; padding: 14px;
+    font-size: 15px; font-weight: 700; color: #fff;
+    cursor: pointer; letter-spacing: .5px;
+    transition: opacity .2s, transform .1s;
+    box-shadow: 0 4px 20px rgba(56,217,245,0.3);
+  }
+  .submit-btn:hover:not(.disabled) { opacity: .9; }
+  .submit-btn:active:not(.disabled) { transform: scale(.98); }
+  .submit-btn.disabled {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.25);
+    box-shadow: none;
+    cursor: not-allowed;
+  }
 
-        @media (max-width: 600px) {
-            .header {
-                padding: 30px 20px;
-                gap: 24px;
-            }
+  .picks-remaining {
+    display: flex; align-items: center; justify-content: center;
+    gap: 6px; margin-bottom: 12px; padding: 8px 12px;
+    background: rgba(251,191,36,0.08);
+    border: 1px solid rgba(251,191,36,0.2);
+    border-radius: 8px;
+    font-size: 12px; color: rgba(251,191,36,0.8);
+    transition: opacity .3s;
+  }
+  .picks-remaining.complete {
+    background: rgba(56,217,245,0.08);
+    border-color: rgba(56,217,245,0.25);
+    color: var(--cyan);
+  }
+  .picks-remaining-icon { font-size: 14px; }
+  .success-msg { text-align: center; padding: 32px 0 0; display: none; }
+  .success-msg.visible { display: block; }
+  .success-icon { font-size: 42px; margin-bottom: 12px; }
+  .success-msg h3 { font-size: 18px; font-weight: 800; color: var(--cyan); margin-bottom: 6px; }
+  .success-msg p { font-size: 13px; color: var(--text-dim); }
 
-            .header-content h1 {
-                font-size: 1.75rem;
-            }
+  /* ── Share Section ── */
+  .share-section { margin-top: 20px; }
+  .share-divider {
+    height: 1px; background: var(--border);
+    margin: 16px 0;
+  }
+  .share-prompt {
+    font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 16px !important;
+  }
+  .share-preview {
+    margin-bottom: 16px; border-radius: 10px; overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  .share-preview img {
+    width: 100%; display: block; border-radius: 10px;
+  }
+  .share-buttons {
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .btn-share {
+    flex: 1; min-width: 120px;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 11px 14px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--surface);
+    color: var(--text);
+    font-family: inherit; font-size: 12px; font-weight: 600;
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+  }
+  .btn-share:hover { background: var(--surface2); border-color: var(--border-act); }
+  .btn-share-download { border-color: rgba(56,217,245,0.3); }
+  .btn-share-download:hover { background: rgba(56,217,245,0.1); }
+  .btn-share-twitter { border-color: rgba(120,170,255,0.3); }
+  .btn-share-twitter:hover { background: rgba(120,170,255,0.1); }
+  .btn-share-copy { border-color: rgba(120,170,255,0.3); }
 
-            .header-content .subtitle {
-                font-size: 0.9rem;
-                margin-bottom: 20px;
-            }
+  /* ── Leaderboard ── */
+  .leaderboard-section {
+    max-width: 620px; margin: 0 auto;
+    padding: 24px 24px 60px;
+  }
+  .lb-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 24px;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .lb-header-row {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 18px;
+  }
+  .lb-title {
+    font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 2px;
+  }
+  .lb-subtitle { font-size: 12px; color: var(--text-dim); }
+  .lb-badge {
+    display: flex; align-items: center; gap: 5px;
+    background: rgba(56,217,245,0.1);
+    border: 1px solid rgba(56,217,245,0.25);
+    border-radius: 20px; padding: 4px 12px 4px 8px;
+    font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+    color: var(--cyan);
+  }
+  .lb-badge-icon {
+    font-size: 10px;
+    animation: livePulse 2s ease-in-out infinite;
+  }
+  @keyframes livePulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
 
-            .info-card {
-                padding: 20px;
-                max-width: 100%;
-            }
+  .lb-tabs {
+    display: flex; gap: 4px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px; padding: 3px;
+    margin-bottom: 16px;
+  }
+  .lb-tab {
+    flex: 1; padding: 8px 12px;
+    border: none; border-radius: 6px;
+    background: transparent;
+    color: var(--text-dim);
+    font-family: inherit; font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all .2s;
+  }
+  .lb-tab.active {
+    background: rgba(255,255,255,0.08);
+    color: var(--text);
+  }
+  .lb-tab:hover:not(.active) { color: var(--text); }
 
-            .info-card h3 {
-                font-size: 0.9rem;
-            }
+  .lb-panel.hidden { display: none; }
 
-            .info-card li {
-                font-size: 0.8rem;
-            }
+  .lb-table-head {
+    display: flex; align-items: center;
+    padding: 0 8px 10px;
+    border-bottom: 1px solid rgba(120,170,255,0.1);
+    font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--text-dim);
+  }
+  .lb-col-rank { width: 32px; text-align: center; }
+  .lb-col-name { flex: 1; }
+  .lb-col-champ { width: 140px; text-align: center; }
+  .lb-col-score { width: 60px; text-align: center; }
 
-            .main-content {
-                padding: 30px 16px;
-            }
+  .lb-row {
+    display: flex; align-items: center;
+    padding: 10px 8px;
+    border-bottom: 1px solid rgba(120,170,255,0.06);
+    transition: background .15s;
+  }
+  .lb-row:hover { background: rgba(255,255,255,0.03); }
+  .lb-row:last-child { border-bottom: none; }
+  .lb-row.top3 { background: rgba(251,191,36,0.04); }
 
-            .footer-section {
-                padding: 25px 16px;
-            }
-        }
-    </style>
+  .lb-rank {
+    width: 32px; text-align: center;
+    font-size: 13px; font-weight: 700; color: var(--text-dim);
+  }
+  .lb-row.top3 .lb-rank { color: var(--gold); }
+  .lb-rank-medal { font-size: 16px; }
+
+  .lb-player {
+    flex: 1; display: flex; align-items: center; gap: 10px;
+  }
+  .lb-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(120,170,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: var(--cyan);
+    flex-shrink: 0;
+  }
+  .lb-player-name {
+    font-size: 13px; font-weight: 600; color: var(--text);
+  }
+  .lb-player-handle {
+    font-size: 11px; color: var(--text-dim);
+  }
+
+  .lb-champ-pick {
+    width: 140px; display: flex; align-items: center;
+    justify-content: center; gap: 6px;
+  }
+  .lb-champ-logo {
+    width: 20px; height: 20px; object-fit: contain;
+  }
+  .lb-champ-text {
+    font-size: 11px; font-weight: 600; color: var(--text-dim);
+  }
+
+  .lb-score {
+    width: 60px; text-align: center;
+    font-size: 15px; font-weight: 800; color: var(--cyan);
+  }
+
+  /* Popular picks tab */
+  .lb-popular-label {
+    font-size: 12px; color: var(--text-dim); margin-bottom: 14px;
+  }
+  .lb-popular-grid {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .lb-pop-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+  }
+  .lb-pop-logo { width: 28px; height: 28px; object-fit: contain; }
+  .lb-pop-name { flex: 1; font-size: 13px; font-weight: 600; color: var(--text); }
+  .lb-pop-bar-wrap {
+    flex: 2; height: 8px; border-radius: 4px;
+    background: rgba(255,255,255,0.06); overflow: hidden;
+  }
+  .lb-pop-bar {
+    height: 100%; border-radius: 4px;
+    background: linear-gradient(90deg, var(--cyan), var(--blue));
+    transition: width .6s ease;
+  }
+  .lb-pop-pct { width: 42px; text-align: right; font-size: 13px; font-weight: 700; color: var(--cyan); }
+  #bracketCapture {
+    background: radial-gradient(ellipse at 50% 30%, #0d2099 0%, #071064 45%, #030a3a 100%);
+    padding-bottom: 24px;
+  }
+
+  /* ── Share capture mode ── */
+  .share-header, .share-footer { display: none; }
+
+  /* ── Capture mode: scale the whole bracket to fit ── */
+  #bracketCapture.capturing {
+    width: 1200px;
+    padding: 0;
+    overflow: hidden;
+  }
+  #bracketCapture.capturing .share-header {
+    display: block; text-align: center;
+    padding: 28px 0 6px;
+  }
+  .share-header-stars {
+    font-size: 12px; font-weight: 700; letter-spacing: 3px;
+    color: rgba(56,217,245,0.7); margin-bottom: 4px;
+  }
+  .share-header-title {
+    font-size: 28px; font-weight: 900; letter-spacing: 1px; color: #e8f0ff;
+  }
+  #bracketCapture.capturing .share-footer {
+    display: block; text-align: center;
+    padding: 12px 0 20px;
+    border-top: 1px solid rgba(120,170,255,0.12);
+  }
+  .share-footer span {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: rgba(120,170,255,0.3);
+  }
+  /* Scale the bracket content inside a wrapper */
+  .share-scale-wrap {
+    transform-origin: top center;
+  }
+  #bracketCapture.capturing .champ-name.active {
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    -webkit-text-fill-color: #fbbf24 !important;
+    color: #fbbf24 !important;
+  }
+  #bracketCapture.capturing .team.winner::after { display: none !important; }
+  #bracketCapture.capturing .bracket-outer { overflow: visible; }
+
+  /* ═══ RULES ═══ */
+  .rules-section {
+    max-width: 480px; margin: 0 auto;
+    padding: 0 24px;
+  }
+  .rules-toggle {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    width: 100%; padding: 10px;
+    background: none; border: none;
+    color: var(--text-dim); font-family: inherit;
+    font-size: 12px; font-weight: 600; letter-spacing: 1px;
+    cursor: pointer; transition: color .2s;
+  }
+  .rules-toggle:hover { color: var(--text); }
+  .rules-toggle-arrow { transition: transform .2s; }
+  .rules-toggle.open .rules-toggle-arrow { transform: rotate(180deg); }
+  .rules-body {
+    display: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 18px;
+    margin-top: 6px; margin-bottom: 8px;
+  }
+  .rules-body.open { display: block; }
+  .rules-list {
+    list-style: none; padding: 0;
+  }
+  .rules-list li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 12px; color: var(--text-dim); line-height: 1.5;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(120,170,255,0.06);
+  }
+  .rules-list li:last-child { border-bottom: none; }
+  .rules-icon {
+    flex-shrink: 0; width: 18px; text-align: center;
+    font-size: 13px; margin-top: 1px;
+  }
+  .rules-list strong { color: var(--cyan); }
+
+  /* ═══ FINAL SCORE PREDICTION ═══ */
+  .score-prediction {
+    margin-top: 16px; padding-top: 16px;
+    border-top: 1px solid rgba(120,170,255,0.1);
+  }
+  .score-prediction h3 {
+    font-size: 14px; font-weight: 700; color: var(--text);
+    margin-bottom: 4px;
+  }
+  .score-prediction .sp-sub {
+    font-size: 11px; color: var(--text-dim); margin-bottom: 14px;
+  }
+  .sp-inputs {
+    display: flex; align-items: center; gap: 10px;
+    justify-content: center;
+  }
+  .sp-team {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    flex: 1;
+  }
+  .sp-team-label {
+    font-size: 11px; font-weight: 700; color: var(--text-dim);
+    letter-spacing: 0.5px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .sp-team-logo { width: 20px; height: 20px; object-fit: contain; }
+  .sp-input {
+    width: 64px; padding: 10px 8px;
+    background: rgba(0,0,0,0.25);
+    border: 1.5px solid var(--border);
+    border-radius: 9px;
+    font-size: 20px; font-weight: 800; color: var(--text);
+    text-align: center; outline: none;
+    font-family: inherit; transition: border-color .2s;
+  }
+  .sp-input:focus { border-color: var(--cyan); }
+  .sp-input::placeholder { color: rgba(120,170,255,0.25); }
+  .sp-dash {
+    font-size: 22px; font-weight: 800; color: var(--text-dim);
+    padding-top: 22px;
+  }
+  .sp-hint {
+    text-align: center; margin-top: 8px;
+    font-size: 10px; color: rgba(120,170,255,0.35);
+  }
+
+  /* ═══ LEADERBOARD PNL COLUMN ═══ */
+  .lb-col-pnl { width: 70px; text-align: center; }
+  .lb-pnl {
+    width: 70px; text-align: center;
+    font-size: 12px; font-weight: 700;
+  }
+  .lb-pnl.positive { color: #34d399; }
+  .lb-pnl.negative { color: #f87171; }
+
+  /* ═══ PRIZE TABLE ═══ */
+  .prize-table {
+    background: rgba(251,191,36,0.04);
+    border: 1px solid rgba(251,191,36,0.15);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  .prize-pool-banner {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: rgba(22,35,120,0.6);
+    border: 2px solid rgba(120,160,255,0.2);
+    border-radius: 10px;
+    padding: 16px 24px;
+    margin-bottom: 16px;
+  }
+  .prize-pool-amount {
+    font-size: clamp(28px, 6vw, 38px); font-weight: 900;
+    color: var(--gold);
+    letter-spacing: 1px;
+    line-height: 1.1;
+  }
+  .prize-pool-label {
+    font-size: 12px; font-weight: 700;
+    color: rgba(251,191,36,0.6);
+    letter-spacing: 3px;
+    margin-top: 2px;
+  }
+  .prize-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .prize-row:last-child { border-bottom: none; }
+  .prize-row.top3 { background: rgba(251,191,36,0.06); border-radius: 6px; }
+  .prize-place {
+    width: 28px; text-align: center;
+    font-size: 13px; font-weight: 800; color: var(--text-dim);
+  }
+  .prize-row.top3 .prize-place { font-size: 16px; }
+  .prize-label {
+    flex: 1; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7);
+  }
+  .prize-row.top3 .prize-label { font-weight: 800; color: rgba(255,255,255,0.9); }
+  .prize-row .prize-amount {
+    font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.6);
+  }
+  .prize-row .prize-amount.gold {
+    color: var(--gold); font-weight: 900; font-size: 14px;
+  }
+
+  /* ═══ CREATOR LANDING OVERLAY ═══ */
+  .creator-landing {
+    position: fixed; inset: 0; z-index: 1000;
+    background: radial-gradient(ellipse at 50% 30%, #0d2099 0%, #071064 45%, #030a3a 100%);
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 24px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .creator-landing.hidden { display: none; }
+
+  .cl-card {
+    max-width: 440px; width: 100%;
+    text-align: center;
+    padding: 32px 0 40px;
+  }
+
+  .cl-badge {
+    font-size: 10px; font-weight: 700; letter-spacing: 3px;
+    color: rgba(56,217,245,0.6); margin-bottom: 28px;
+  }
+
+  .cl-avatar {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: linear-gradient(135deg, rgba(251,191,36,0.15), rgba(56,217,245,0.1));
+    border: 2px solid rgba(251,191,36,0.35);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; font-weight: 900; color: var(--gold);
+    margin: 0 auto 18px;
+  }
+
+  .cl-title {
+    font-size: clamp(22px, 5vw, 28px); font-weight: 900; color: #e8f0ff;
+    line-height: 1.2; margin-bottom: 6px;
+  }
+  .cl-title span {
+    background: linear-gradient(90deg, var(--cyan), var(--blue));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  .cl-subtitle {
+    font-size: 15px; color: var(--text-dim); margin-bottom: 28px;
+  }
+
+  /* Bracket preview card */
+  .cl-bracket {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 16px;
+    margin-bottom: 28px;
+    text-align: left;
+  }
+
+  .cl-round-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: rgba(120,170,255,0.35);
+    margin-bottom: 6px;
+  }
+  .cl-round-label:not(:first-child) { margin-top: 12px; }
+
+  .cl-match {
+    display: flex; align-items: center; gap: 6px;
+    padding: 4px 0;
+  }
+
+  .cl-team {
+    display: flex; align-items: center; gap: 6px;
+    flex: 1; min-width: 0;
+    padding: 5px 8px;
+    border-radius: 6px;
+  }
+  .cl-team.cl-winner {
+    background: rgba(56,217,245,0.08);
+    border: 1px solid rgba(56,217,245,0.2);
+  }
+  .cl-team.cl-loser { opacity: 0.3; }
+
+  .cl-team-logo { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
+  .cl-team-name {
+    font-size: 11px; font-weight: 600; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .cl-team.cl-winner .cl-team-name { color: var(--cyan); }
+
+  .cl-vs {
+    font-size: 9px; font-weight: 700; color: rgba(120,170,255,0.25);
+    flex-shrink: 0;
+  }
+
+  /* Champion callout */
+  .cl-champ {
+    text-align: center; margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(120,170,255,0.1);
+  }
+  .cl-champ-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 2.5px;
+    text-transform: uppercase; color: rgba(251,191,36,0.55);
+    margin-bottom: 8px;
+  }
+  .cl-champ-team {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 8px 20px;
+    background: linear-gradient(135deg, rgba(251,191,36,0.08), rgba(56,217,245,0.04));
+    border: 1px solid rgba(251,191,36,0.2);
+    border-radius: 10px;
+  }
+  .cl-champ-logo { width: 30px; height: 30px; object-fit: contain; }
+  .cl-champ-name {
+    font-size: 15px; font-weight: 800;
+    background: linear-gradient(90deg, #fbbf24, #f59e0b);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  /* CTAs */
+  .cl-ctas {
+    display: flex; flex-direction: column; gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .cl-cta {
+    width: 100%; padding: 15px 24px;
+    border-radius: 12px;
+    font-family: inherit; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+    border: none;
+  }
+
+  .cl-cta-primary {
+    background: linear-gradient(135deg, #0a6edb, var(--cyan));
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(56,217,245,0.25);
+  }
+  .cl-cta-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+  .cl-cta-primary:active { transform: scale(0.98); }
+
+  .cl-cta-secondary {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border) !important;
+  }
+  .cl-cta-secondary:hover { background: var(--surface2); border-color: var(--border-act) !important; }
+
+  .cl-fine {
+    font-size: 11px; color: rgba(120,170,255,0.3);
+  }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdn.amplitude.com/libs/analytics-browser-2.11.1-min.js.gz"></script>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <p class="subtitle">Champions League 2025/26 Knockout Stage</p>
-            <p class="prize-pool">Total Prize Pool: <strong>$5,000</strong></p>
-        </div>
-        <div class="info-card">
-            <h3>The prediction challenge has ended.</h3>
-            <p class="label">All matches have been played.</p>
-            <ul>
-                <li>
-                    <span class="check-circle">&#10003;</span>
-                    Predictions are locked
-                </li>
-                <li>
-                    <span class="check-circle">&#10003;</span>
-                    Results are being calculated
-                </li>
-                <li>
-                    <span class="check-circle">&#10003;</span>
-                    Winners announced soon
-                </li>
-            </ul>
-        </div>
-    </header>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="finished-banner">
-            <div class="finished-badge">Challenge Complete</div>
-            <h2>The Challenge Has Finished</h2>
-            <p>All Round of 16 matches have been played. We are currently reviewing predictions and verifying results.</p>
-            <p><span class="highlight">Results and winners will be announced soon.</span></p>
-            <div class="finished-divider"></div>
-            <p class="finished-note">Thank you to everyone who participated. Stay tuned!</p>
+<!-- ══ Starball Backgrounds ══ -->
+<svg class="starball-bg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="sg1" cx="38%" cy="35%" r="55%">
+      <stop offset="0%" stop-color="#38d9f5"/><stop offset="40%" stop-color="#1a6ef5"/><stop offset="100%" stop-color="#0a1a8a"/>
+    </radialGradient>
+    <radialGradient id="sg2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38d9f5" stop-opacity=".6"/><stop offset="100%" stop-color="#0a1a8a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <g transform="translate(250,250)">
+    <polygon points="0,-220 22,-55 0,-30 -22,-55" fill="url(#sg1)" opacity=".9"/>
+    <polygon points="0,220 22,55 0,30 -22,55" fill="url(#sg1)" opacity=".7"/>
+    <polygon points="-220,0 -55,-22 -30,0 -55,22" fill="url(#sg1)" opacity=".8"/>
+    <polygon points="220,0 55,-22 30,0 55,22" fill="url(#sg1)" opacity=".6"/>
+    <polygon points="-156,-156 -30,-42 -8,-8 -42,-30" fill="url(#sg1)" opacity=".85"/>
+    <polygon points="156,156 30,42 8,8 42,30" fill="url(#sg1)" opacity=".65"/>
+    <polygon points="156,-156 42,-30 8,-8 30,-42" fill="url(#sg1)" opacity=".75"/>
+    <polygon points="-156,156 -42,30 -8,8 -30,42" fill="url(#sg1)" opacity=".7"/>
+    <circle cx="0" cy="0" r="210" fill="none" stroke="rgba(120,200,255,0.25)" stroke-width="1"/>
+    <line x1="-210" y1="0" x2="210" y2="0" stroke="rgba(120,200,255,0.15)" stroke-width="1"/>
+    <line x1="0" y1="-210" x2="0" y2="210" stroke="rgba(120,200,255,0.15)" stroke-width="1"/>
+    <polygon points="0,-210 148,-148 210,0 148,148 0,210 -148,148 -210,0 -148,-148" fill="none" stroke="rgba(120,200,255,0.18)" stroke-width="1"/>
+    <circle cx="-80" cy="-80" r="90" fill="url(#sg2)" opacity=".7"/>
+  </g>
+</svg>
+
+<svg class="starball-bg2" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="sg3" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#38d9f5"/><stop offset="50%" stop-color="#1a6ef5"/><stop offset="100%" stop-color="#0a1a8a"/>
+    </radialGradient>
+  </defs>
+  <g transform="translate(250,250)">
+    <polygon points="0,-220 22,-55 0,-30 -22,-55" fill="url(#sg3)" opacity=".8"/>
+    <polygon points="0,220 22,55 0,30 -22,55" fill="url(#sg3)" opacity=".6"/>
+    <polygon points="-220,0 -55,-22 -30,0 -55,22" fill="url(#sg3)" opacity=".7"/>
+    <polygon points="220,0 55,-22 30,0 55,22" fill="url(#sg3)" opacity=".6"/>
+    <circle cx="0" cy="0" r="210" fill="none" stroke="rgba(120,200,255,0.2)" stroke-width="1"/>
+    <polygon points="0,-210 148,-148 210,0 148,148 0,210 -148,148 -210,0 -148,-148" fill="none" stroke="rgba(120,200,255,0.15)" stroke-width="1"/>
+  </g>
+</svg>
+
+<!-- ══ Creator Landing Overlay ══ -->
+<div class="creator-landing hidden" id="creatorLanding">
+  <div class="cl-card">
+    <div class="cl-badge">&#9733; &#9733; &#9733; &nbsp; UCL BRACKET CHALLENGE &nbsp; &#9733; &#9733; &#9733;</div>
+    <div class="cl-avatar" id="clAvatar">GN</div>
+    <h1 class="cl-title"><span id="clName">Gary Neville</span> has made their picks</h1>
+    <p class="cl-subtitle">Think you can do better?</p>
+
+    <div class="cl-bracket" id="clBracket"></div>
+
+    <div class="cl-ctas">
+      <button class="cl-cta cl-cta-primary" onclick="startOwnBracket()">Fill My Own Bracket</button>
+      <button class="cl-cta cl-cta-secondary" onclick="copyCreatorPicks()">Start with <span id="clNameCopy">Gary</span>'s Picks</button>
+    </div>
+    <p class="cl-fine">You'll join <span id="clNameFine">Gary Neville</span>'s cohort on the leaderboard</p>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- ══ Header ══ -->
+  <div class="header">
+    <div class="ucl-badge">
+      <span class="ucl-stars">&#9733; &#9733; &#9733;</span>
+      <span class="ucl-label">UEFA Champions League</span>
+      <span class="ucl-stars">&#9733; &#9733; &#9733;</span>
+    </div>
+    <h1>Pick Your <span>Champion</span></h1>
+    <p>Predict the winner of every match from Quarter-Finals to the Final</p>
+    <div class="prize-banner">
+      <span class="prize-amount">$13,500</span>
+      <span class="prize-label">Prize Pool</span>
+    </div>
+  </div>
+
+  <!-- ══ How It Works ══ -->
+  <div class="how-it-works">
+    <div class="step"><span class="step-num">1</span><span class="step-text">Tap a team to pick the winner of each match</span></div>
+    <div class="step-divider"></div>
+    <div class="step"><span class="step-num">2</span><span class="step-text">Winners advance through the bracket automatically</span></div>
+    <div class="step-divider"></div>
+    <div class="step"><span class="step-num">3</span><span class="step-text">Pick all 7 matches and submit to enter</span></div>
+  </div>
+
+  <!-- ══ Rules ══ -->
+  <div class="rules-section">
+    <button class="rules-toggle" id="rulesToggle" onclick="toggleRules()">
+      Challenge Rules <span class="rules-toggle-arrow">&#9660;</span>
+    </button>
+    <div class="rules-body" id="rulesBody">
+      <ul class="rules-list">
+        <li><span class="rules-icon">&#128176;</span><span>Minimum <strong>$10 traded</strong> per user to qualify for the prize pool.</span></li>
+        <li><span class="rules-icon">&#9878;</span><span>Maximum <strong>80% chance</strong> per trade &mdash; no low-risk farming.</span></li>
+        <li><span class="rules-icon">&#128100;</span><span><strong>1 account / entry</strong> per participant. Duplicate accounts will be disqualified.</span></li>
+        <li><span class="rules-icon">&#127942;</span><span>Scoring: <strong>7 pts</strong> for bracket accuracy + <strong>3 pts</strong> for final score prediction = <strong>10 pts max</strong>. PNL breaks ties.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══ Progress ══ -->
+  <div class="progress-wrap" id="progressBar">
+    <div class="progress-seg" id="prog0"></div>
+    <div class="progress-seg" id="prog1"></div>
+    <div class="progress-seg" id="prog2"></div>
+    <div class="progress-seg" id="prog3"></div>
+    <div class="progress-seg" id="prog4"></div>
+    <div class="progress-seg" id="prog5"></div>
+    <div class="progress-seg" id="prog6"></div>
+  </div>
+
+  <!-- ══ Bracket Capture Area ══ -->
+  <div id="bracketCapture">
+
+  <!-- Share-only header (hidden normally) -->
+  <div class="share-header" id="shareHeader">
+    <div class="share-header-stars">&#9733; &#9733; &#9733; &nbsp; UEFA CHAMPIONS LEAGUE &nbsp; &#9733; &#9733; &#9733;</div>
+    <div class="share-header-title">MY BRACKET PREDICTION</div>
+  </div>
+
+  <div class="share-scale-wrap" id="shareScaleWrap">
+  <!-- ══ Trophy ══ -->
+  <div class="trophy-section">
+    <div class="trophy-container">
+      <div class="trophy-area">
+        <img class="trophy-svg" id="trophySvg" src="logos/ucl_trophy.svg" alt="UEFA Champions League Trophy">
+        <img class="champ-logo" id="champLogo" src="" alt="">
+      </div>
+      <div class="champ-label">YOUR CHAMPION</div>
+      <div class="champ-name" id="champName">?</div>
+    </div>
+  </div>
+
+  <!-- ══ Round Labels ══ -->
+  <div class="round-labels">
+    <div class="round-label rl-qf active" id="lbl-qf-l">Quarter-Finals</div>
+    <div class="round-label rl-conn">&nbsp;</div>
+    <div class="round-label rl-sf" id="lbl-sf-l">Semi-Finals</div>
+    <div class="round-label rl-conn">&nbsp;</div>
+    <div class="round-label rl-final" id="lbl-f">Final</div>
+    <div class="round-label rl-conn">&nbsp;</div>
+    <div class="round-label rl-sf" id="lbl-sf-r">Semi-Finals</div>
+    <div class="round-label rl-conn">&nbsp;</div>
+    <div class="round-label rl-qf" id="lbl-qf-r">Quarter-Finals</div>
+  </div>
+
+  <!-- ══ Bracket ══ -->
+  <div class="bracket-outer">
+    <div class="bracket" id="bracket">
+
+      <!-- ── LEFT HALF ── -->
+      <div class="bracket-half">
+
+        <!-- Left QF Group: 2 matches + merge connector -->
+        <div class="qf-group">
+          <div class="qf-col">
+            <div class="match hint-pulse" id="match-qf0">
+              <div class="tap-hint" id="tapHint">Tap the winner</div>
+              <div class="team" id="qf0t0" onclick="pick('qf',0,0)"><img class="team-logo" src="logos/real_madrid.png" alt="Real Madrid"><span class="team-name">Real Madrid</span><div class="pick-dot"></div></div>
+              <div class="team" id="qf0t1" onclick="pick('qf',0,1)"><img class="team-logo" src="logos/bayern.png" alt="Bayern Munich"><span class="team-name">Bayern Munich</span><div class="pick-dot"></div></div>
+            </div>
+            <div class="match hint-pulse" id="match-qf1">
+              <div class="team" id="qf1t0" onclick="pick('qf',1,0)"><img class="team-logo" src="logos/psg.png" alt="Paris Saint-Germain"><span class="team-name">Paris Saint-Germain</span><div class="pick-dot"></div></div>
+              <div class="team" id="qf1t1" onclick="pick('qf',1,1)"><img class="team-logo" src="logos/liverpool.png" alt="Liverpool"><span class="team-name">Liverpool</span><div class="pick-dot"></div></div>
+            </div>
+          </div>
+          <svg class="conn-merge" width="44" height="320" viewBox="0 0 44 320">
+            <path d="M0,62 H22 V160 H44" fill="none" stroke="var(--line)" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+            <path d="M0,258 H22 V160 H44" fill="none" stroke="var(--line)" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+          </svg>
         </div>
 
-        <div class="footer-section">
-            <p class="powered-by">Powered by <a href="https://limitless.exchange">Limitless Exchange</a></p>
+        <!-- Left SF -->
+        <div class="sf-col">
+          <div class="match" id="match-sf0">
+            <div class="team tbd" id="sf0t0" onclick="pick('sf',0,0)"><div class="team-logo-placeholder">?</div><span class="team-name" id="sf0t0-name">TBD</span><div class="pick-dot"></div></div>
+            <div class="team tbd" id="sf0t1" onclick="pick('sf',0,1)"><div class="team-logo-placeholder">?</div><span class="team-name" id="sf0t1-name">TBD</span><div class="pick-dot"></div></div>
+          </div>
         </div>
-    </main>
 
-    <script src="https://cdn.amplitude.com/libs/analytics-browser-2.11.0-min.js.gz"></script>
-    <script>
-        amplitude.init('610783468f194699f50a96c109c2ebbd', { autocapture: { elementInteractions: false } });
-        amplitude.track('uefa_challenge_page_opened', { state: 'finished' });
-    </script>
+        <!-- Line to Final -->
+        <svg class="conn-line" width="44" height="4" viewBox="0 0 44 4">
+          <line x1="0" y1="2" x2="44" y2="2" stroke="var(--line)" stroke-width="1.5"/>
+        </svg>
+      </div>
+
+      <!-- ── CENTER: Final ── -->
+      <div class="final-col">
+        <div class="match final-match" id="match-final">
+          <div class="team tbd" id="ft0" onclick="pick('final',0,0)"><div class="team-logo-placeholder">?</div><span class="team-name" id="ft0-name">TBD</span><div class="pick-dot"></div></div>
+          <div class="team tbd" id="ft1" onclick="pick('final',0,1)"><div class="team-logo-placeholder">?</div><span class="team-name" id="ft1-name">TBD</span><div class="pick-dot"></div></div>
+        </div>
+      </div>
+
+      <!-- ── RIGHT HALF ── -->
+      <div class="bracket-half">
+
+        <!-- Line from Final -->
+        <svg class="conn-line" width="44" height="4" viewBox="0 0 44 4">
+          <line x1="0" y1="2" x2="44" y2="2" stroke="var(--line)" stroke-width="1.5"/>
+        </svg>
+
+        <!-- Right SF -->
+        <div class="sf-col right-side">
+          <div class="match" id="match-sf1">
+            <div class="team tbd" id="sf1t0" onclick="pick('sf',1,0)"><div class="team-logo-placeholder">?</div><span class="team-name" id="sf1t0-name">TBD</span><div class="pick-dot"></div></div>
+            <div class="team tbd" id="sf1t1" onclick="pick('sf',1,1)"><div class="team-logo-placeholder">?</div><span class="team-name" id="sf1t1-name">TBD</span><div class="pick-dot"></div></div>
+          </div>
+        </div>
+
+        <!-- Right QF Group: merge connector + 2 matches -->
+        <div class="qf-group">
+          <svg class="conn-merge" width="44" height="320" viewBox="0 0 44 320">
+            <path d="M44,62 H22 V160 H0" fill="none" stroke="var(--line)" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+            <path d="M44,258 H22 V160 H0" fill="none" stroke="var(--line)" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+          </svg>
+          <div class="qf-col right-side">
+            <div class="match hint-pulse" id="match-qf2">
+              <div class="team" id="qf2t0" onclick="pick('qf',2,0)"><img class="team-logo" src="logos/sporting.png" alt="Sporting CP"><span class="team-name">Sporting CP</span><div class="pick-dot"></div></div>
+              <div class="team" id="qf2t1" onclick="pick('qf',2,1)"><img class="team-logo" src="logos/arsenal.png" alt="Arsenal"><span class="team-name">Arsenal</span><div class="pick-dot"></div></div>
+            </div>
+            <div class="match hint-pulse" id="match-qf3">
+              <div class="team" id="qf3t0" onclick="pick('qf',3,0)"><img class="team-logo" src="logos/barcelona.png" alt="Barcelona"><span class="team-name">Barcelona</span><div class="pick-dot"></div></div>
+              <div class="team" id="qf3t1" onclick="pick('qf',3,1)"><img class="team-logo" src="logos/atletico.png" alt="Atletico Madrid"><span class="team-name">Atletico Madrid</span><div class="pick-dot"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  </div><!-- /shareScaleWrap -->
+
+  <!-- Share-only footer (hidden normally) -->
+  <div class="share-footer" id="shareFooter">
+    <span>LIMITLESS &nbsp;&bull;&nbsp; UCL BRACKET CHALLENGE &nbsp;&bull;&nbsp; $13,500 PRIZE POOL</span>
+  </div>
+
+  </div><!-- /bracketCapture -->
+
+  <div class="divider"></div>
+
+  <!-- ══ Form ══ -->
+  <div class="form-section" id="formSection">
+    <div class="form-card">
+      <h2>Almost there! <span>Lock in your pick</span></h2>
+      <p>Submit your bracket for a chance to win from the <strong>$13,500 prize pool</strong>.</p>
+
+      <div class="form-notice">
+        <svg class="form-notice-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M10 6v5M10 13.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span>Use the email or Twitter/X you'll sign up to <strong>Limitless</strong> with &mdash; we'll use it to identify your account and track your bracket.</span>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="inputEmail" placeholder="you@example.com"/>
+        <span class="field-hint">The email you'll use for your Limitless account</span>
+      </div>
+      <div class="form-or">
+        <span class="form-or-line"></span>
+        <span class="form-or-text">or</span>
+        <span class="form-or-line"></span>
+      </div>
+      <div class="form-group">
+        <label>Twitter / X Handle</label>
+        <input type="text" id="inputTwitter" placeholder="@yourhandle"/>
+        <span class="field-hint">Your Twitter/X linked to your Limitless account</span>
+      </div>
+      <div class="score-prediction" id="scorePrediction">
+        <h3>Predict the Final Score</h3>
+        <p class="sp-sub">+1 pt per correct side, +1 bonus for exact result (max 3 pts)</p>
+        <div class="sp-inputs">
+          <div class="sp-team">
+            <span class="sp-team-label" id="spTeam0Label">Finalist 1</span>
+            <input type="number" class="sp-input" id="inputScore0" min="0" max="20" placeholder="-">
+          </div>
+          <span class="sp-dash">&ndash;</span>
+          <div class="sp-team">
+            <span class="sp-team-label" id="spTeam1Label">Finalist 2</span>
+            <input type="number" class="sp-input" id="inputScore1" min="0" max="20" placeholder="-">
+          </div>
+        </div>
+        <div class="sp-hint">Predict the score at full time (before extra time / pens)</div>
+      </div>
+
+      <div class="picks-remaining" id="picksRemaining">
+        <span class="picks-remaining-icon">&#9888;</span>
+        <span id="picksRemainingText">Select all 7 matches to submit</span>
+      </div>
+      <button class="submit-btn disabled" id="submitBtn" onclick="submitBracket()">Submit My Bracket &rarr;</button>
+      <div class="success-msg" id="successMsg">
+        <div class="success-icon">&#127881;</div>
+        <h3>You're in!</h3>
+        <p>Your bracket has been submitted.<br>Create your <strong>Limitless</strong> account with the same email or Twitter/X to claim your prize.</p>
+        <div class="share-section">
+          <div class="share-divider"></div>
+          <p class="share-prompt">Share your bracket with friends and challenge them!</p>
+          <div class="share-preview" id="sharePreview"></div>
+          <div class="share-buttons">
+            <button class="btn-share btn-share-download" onclick="downloadBracketImage()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download Image
+            </button>
+            <button class="btn-share btn-share-copy" onclick="copyBracketToClipboard()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              Copy Image
+            </button>
+            <button class="btn-share btn-share-twitter" onclick="shareOnTwitter()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              Share on X
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══ Leaderboard ══ -->
+  <div class="leaderboard-section">
+    <div class="lb-card">
+      <div class="lb-header-row">
+        <div>
+          <h2 class="lb-title">Leaderboard</h2>
+          <p class="lb-subtitle">Ranked by accuracy score, PNL breaks ties</p>
+        </div>
+      </div>
+
+      <!-- Top Predictors -->
+      <!-- Prize Breakdown -->
+      <div class="prize-table">
+        <div class="prize-pool-banner">
+          <span class="prize-pool-amount">$13,500</span>
+          <span class="prize-pool-label">PRIZE POOL</span>
+        </div>
+        <div class="prize-row top3"><span class="prize-place">🥇</span><span class="prize-label">1st Place</span><span class="prize-amount gold">$5,000</span></div>
+        <div class="prize-row top3"><span class="prize-place">🥈</span><span class="prize-label">2nd Place</span><span class="prize-amount gold">$3,500</span></div>
+        <div class="prize-row top3"><span class="prize-place">🥉</span><span class="prize-label">3rd Place</span><span class="prize-amount gold">$2,500</span></div>
+        <div class="prize-row"><span class="prize-place">4</span><span class="prize-label">4th Place</span><span class="prize-amount">$1,000</span></div>
+        <div class="prize-row"><span class="prize-place">5</span><span class="prize-label">5th Place</span><span class="prize-amount">$500</span></div>
+        <div class="prize-row"><span class="prize-place">6</span><span class="prize-label">6th Place</span><span class="prize-amount">$200</span></div>
+        <div class="prize-row"><span class="prize-place">7</span><span class="prize-label">7th Place</span><span class="prize-amount">$200</span></div>
+        <div class="prize-row"><span class="prize-place">8</span><span class="prize-label">8th Place</span><span class="prize-amount">$200</span></div>
+        <div class="prize-row"><span class="prize-place">9</span><span class="prize-label">9th Place</span><span class="prize-amount">$200</span></div>
+        <div class="prize-row"><span class="prize-place">10</span><span class="prize-label">10th Place</span><span class="prize-amount">$200</span></div>
+      </div>
+
+      <div class="lb-table-head">
+        <span class="lb-col-rank">#</span>
+        <span class="lb-col-name">Player</span>
+        <span class="lb-col-champ">Champion Pick</span>
+        <span class="lb-col-score">Score</span>
+        <span class="lb-col-pnl">PNL</span>
+      </div>
+      <div class="lb-rows" id="lbRows">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ── Amplitude Analytics ── */
+// Replace 'YOUR_AMPLITUDE_API_KEY' with your real key
+var AMP_API_KEY = 'YOUR_AMPLITUDE_API_KEY';
+amplitude.init(AMP_API_KEY, { autocapture: { elementInteractions: false } });
+
+function ampTrack(event, props) {
+  try { amplitude.track(event, props); } catch(e) {}
+}
+
+function ampIdentify(email, twitter) {
+  try {
+    var identify = new amplitude.Identify();
+    if (email) identify.set('email', email);
+    if (twitter) identify.set('twitter_handle', twitter);
+    identify.set('last_active', new Date().toISOString());
+    amplitude.identify(identify);
+  } catch(e) {}
+}
+
+function ampSetUserId(email, twitter) {
+  try {
+    var userId = email || twitter;
+    if (userId) amplitude.setUserId(userId);
+  } catch(e) {}
+}
+
+// Helper: get full bracket state for event properties
+function getBracketState() {
+  var state = { champion: null, qf_picks: [], sf_picks: [], final_pick: null };
+  for (var i = 0; i < 4; i++) {
+    state.qf_picks.push(picks.qf[i] !== null ? QF_TEAMS[i][picks.qf[i]].name : null);
+  }
+  for (var i = 0; i < 2; i++) {
+    state.sf_picks.push(picks.sf[i] !== null && resolved.sf[i][picks.sf[i]]
+      ? resolved.sf[i][picks.sf[i]].name : null);
+  }
+  if (picks.final[0] !== null && resolved.final[picks.final[0]]) {
+    state.final_pick = resolved.final[picks.final[0]].name;
+    state.champion = state.final_pick;
+  }
+  return state;
+}
+
+// Detect creator/referral source from URL for attribution
+var _urlParams = new URLSearchParams(window.location.search);
+var _sourceCreator = (_urlParams.get('creator') || '').toUpperCase() || null;
+var _utmSource = _urlParams.get('utm_source') || null;
+var _utmMedium = _urlParams.get('utm_medium') || null;
+var _utmCampaign = _urlParams.get('utm_campaign') || null;
+
+// Track page view with attribution (creator_name resolved later in initCreatorLanding)
+ampTrack('Page Viewed', {
+  page: 'UCL Bracket Challenge',
+  creator_code: _sourceCreator,
+  entry_type: _sourceCreator ? 'creator_link' : 'direct',
+  utm_source: _utmSource,
+  utm_medium: _utmMedium,
+  utm_campaign: _utmCampaign
+});
+
+const QF_TEAMS = [
+  [{logo:'logos/real_madrid.png', name:'Real Madrid'}, {logo:'logos/bayern.png', name:'Bayern Munich'}],
+  [{logo:'logos/psg.png', name:'Paris Saint-Germain'}, {logo:'logos/liverpool.png', name:'Liverpool'}],
+  [{logo:'logos/sporting.png', name:'Sporting CP'}, {logo:'logos/arsenal.png', name:'Arsenal'}],
+  [{logo:'logos/barcelona.png', name:'Barcelona'}, {logo:'logos/atletico.png', name:'Atletico Madrid'}],
+];
+
+/* ── Creator Brackets ── */
+const CREATOR_DATA = {
+  'GARY10':  { name: 'Gary Neville',    first: 'Gary',    initials: 'GN', picks: { qf: [0, 1, 1, 0], sf: [1, 0], final: [0] } },
+  'CARRA7':  { name: 'Jamie Carragher', first: 'Jamie',   initials: 'JC', picks: { qf: [0, 1, 0, 0], sf: [1, 0], final: [0] } },
+  'HENRY14': { name: 'Thierry Henry',   first: 'Thierry', initials: 'TH', picks: { qf: [0, 0, 1, 0], sf: [0, 0], final: [1] } },
+  'RIO5':    { name: 'Rio Ferdinand',   first: 'Rio',     initials: 'RF', picks: { qf: [0, 1, 1, 0], sf: [0, 1], final: [0] } },
+  'DRURY1':  { name: 'Peter Drury',     first: 'Peter',   initials: 'PD', picks: { qf: [1, 0, 1, 0], sf: [1, 1], final: [1] } },
+};
+var activeCreator = null;
+
+const picks = { qf:[null,null,null,null], sf:[null,null], final:[null] };
+const resolved = { sf:[[null,null],[null,null]], final:[null,null], champ:null };
+let submitted = false;
+
+function setTeamSlot(elId, nameElId, team) {
+  const row = document.getElementById(elId);
+  const nameEl = document.getElementById(nameElId);
+  const logoWrap = row.querySelector('.team-logo-placeholder') || row.querySelector('.team-logo');
+  if (!team) {
+    // Replace img with placeholder if needed
+    if (logoWrap && logoWrap.tagName === 'IMG') {
+      const ph = document.createElement('div');
+      ph.className = 'team-logo-placeholder';
+      ph.textContent = '?';
+      logoWrap.replaceWith(ph);
+    }
+    nameEl.textContent = 'TBD';
+    row.classList.add('tbd');
+    row.classList.remove('winner','loser');
+  } else {
+    // Replace placeholder with img if needed
+    if (logoWrap && logoWrap.tagName !== 'IMG') {
+      const img = document.createElement('img');
+      img.className = 'team-logo';
+      img.src = team.logo;
+      img.alt = team.name;
+      logoWrap.replaceWith(img);
+    } else if (logoWrap) {
+      logoWrap.src = team.logo;
+      logoWrap.alt = team.name;
+    }
+    nameEl.textContent = team.name;
+    row.classList.remove('tbd','winner','loser');
+  }
+}
+
+function updateProgress() {
+  let done = 0;
+  picks.qf.forEach(p => { if (p !== null) done++; });
+  picks.sf.forEach(p => { if (p !== null) done++; });
+  if (picks.final[0] !== null) done++;
+  for (let i = 0; i < 7; i++) {
+    document.getElementById('prog' + i).classList.toggle('done', i < done);
+  }
+
+  const qfDone = picks.qf.every(p => p !== null);
+  const sfDone = picks.sf.every(p => p !== null);
+
+  document.getElementById('lbl-qf-l').classList.toggle('active', !qfDone);
+  document.getElementById('lbl-qf-r').classList.toggle('active', !qfDone);
+  document.getElementById('lbl-sf-l').classList.toggle('active', qfDone && !sfDone);
+  document.getElementById('lbl-sf-r').classList.toggle('active', qfDone && !sfDone);
+  document.getElementById('lbl-f').classList.toggle('active', sfDone && picks.final[0] === null);
+
+  // Update submit button state
+  var btn = document.getElementById('submitBtn');
+  var rem = document.getElementById('picksRemaining');
+  var remText = document.getElementById('picksRemainingText');
+  if (btn && rem) {
+    var remaining = 7 - done;
+    if (remaining === 0) {
+      btn.classList.remove('disabled');
+      rem.classList.add('complete');
+      remText.textContent = 'All picks complete \u2014 ready to submit!';
+      document.querySelector('.picks-remaining-icon').textContent = '\u2713';
+    } else {
+      btn.classList.add('disabled');
+      rem.classList.remove('complete');
+      remText.textContent = remaining + ' match' + (remaining > 1 ? 'es' : '') + ' remaining';
+      document.querySelector('.picks-remaining-icon').textContent = '\u26A0';
+    }
+  }
+}
+
+function clearHints() {
+  var hint = document.getElementById('tapHint');
+  if (hint) hint.remove();
+  document.querySelectorAll('.hint-pulse').forEach(function(el) {
+    el.classList.remove('hint-pulse');
+  });
+}
+
+function pulseMatch(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.add('hint-pulse');
+}
+
+function updateHints() {
+  // Pulse SF matches when both their QF feeders are picked
+  if (picks.qf[0] !== null && picks.qf[1] !== null && picks.sf[0] === null) pulseMatch('match-sf0');
+  if (picks.qf[2] !== null && picks.qf[3] !== null && picks.sf[1] === null) pulseMatch('match-sf1');
+  // Pulse final when both SFs are picked
+  if (picks.sf[0] !== null && picks.sf[1] !== null && picks.final[0] === null) pulseMatch('match-final');
+}
+
+function resetQF(matchIdx) {
+  picks.qf[matchIdx] = null;
+  document.getElementById('qf' + matchIdx + 't0').classList.remove('winner','loser');
+  document.getElementById('qf' + matchIdx + 't1').classList.remove('winner','loser');
+
+  var sfMatch = matchIdx < 2 ? 0 : 1;
+  var sfSlot = matchIdx % 2;
+  resolved.sf[sfMatch][sfSlot] = null;
+  setTeamSlot('sf' + sfMatch + 't' + sfSlot, 'sf' + sfMatch + 't' + sfSlot + '-name', null);
+
+  // SF pick is invalid if one participant is gone
+  if (picks.sf[sfMatch] !== null) {
+    resetSF(sfMatch);
+  }
+}
+
+function pick(round, matchIdx, teamIdx) {
+  if (submitted) return;
+  if (round === 'sf' && resolved.sf[matchIdx][teamIdx] === null) return;
+  if (round === 'final' && resolved.final[teamIdx] === null) return;
+
+  // Clear all hints on first interaction, then show contextual ones
+  clearHints();
+
+  if (round === 'qf') {
+    // Deselect: click the current winner again to undo
+    if (picks.qf[matchIdx] === teamIdx) {
+      resetQF(matchIdx);
+      updateProgress();
+      updateHints();
+      return;
+    }
+
+    picks.qf[matchIdx] = teamIdx;
+    var winner = QF_TEAMS[matchIdx][teamIdx];
+    var loserIdx = teamIdx === 0 ? 1 : 0;
+    document.getElementById('qf' + matchIdx + 't' + teamIdx).classList.add('winner');
+    document.getElementById('qf' + matchIdx + 't' + teamIdx).classList.remove('loser','tbd');
+    document.getElementById('qf' + matchIdx + 't' + loserIdx).classList.add('loser');
+    document.getElementById('qf' + matchIdx + 't' + loserIdx).classList.remove('winner','tbd');
+
+    var sfMatch = matchIdx < 2 ? 0 : 1;
+    var sfSlot = matchIdx % 2;
+    resolved.sf[sfMatch][sfSlot] = winner;
+    setTeamSlot('sf' + sfMatch + 't' + sfSlot, 'sf' + sfMatch + 't' + sfSlot + '-name', winner);
+
+    if (picks.sf[sfMatch] !== null) {
+      if (picks.sf[sfMatch] === sfSlot) resetSF(sfMatch);
+      else propagateSF(sfMatch);
+    }
+  } else if (round === 'sf') {
+    // Deselect: click the current SF winner again to undo
+    if (picks.sf[matchIdx] === teamIdx) {
+      picks.sf[matchIdx] = null;
+      document.getElementById('sf' + matchIdx + 't0').classList.remove('winner','loser');
+      document.getElementById('sf' + matchIdx + 't1').classList.remove('winner','loser');
+      resolved.final[matchIdx] = null;
+      setTeamSlot('ft' + matchIdx, 'ft' + matchIdx + '-name', null);
+      if (picks.final[0] !== null) resetFinal();
+      updateProgress();
+      updateHints();
+      return;
+    }
+
+    picks.sf[matchIdx] = teamIdx;
+    var winner = resolved.sf[matchIdx][teamIdx];
+    var loserIdx = teamIdx === 0 ? 1 : 0;
+    document.getElementById('sf' + matchIdx + 't' + teamIdx).classList.add('winner');
+    document.getElementById('sf' + matchIdx + 't' + teamIdx).classList.remove('loser','tbd');
+    document.getElementById('sf' + matchIdx + 't' + loserIdx).classList.add('loser');
+    document.getElementById('sf' + matchIdx + 't' + loserIdx).classList.remove('winner','tbd');
+
+    resolved.final[matchIdx] = winner;
+    setTeamSlot('ft' + matchIdx, 'ft' + matchIdx + '-name', winner);
+
+    if (picks.final[0] !== null && picks.final[0] === matchIdx) resetFinal();
+    else propagateFinal();
+  } else if (round === 'final') {
+    // Deselect: click the current final winner again to undo
+    if (picks.final[0] === teamIdx) {
+      resetFinal();
+      updateHints();
+      return;
+    }
+
+    picks.final[0] = teamIdx;
+    var winner = resolved.final[teamIdx];
+    var loserIdx = teamIdx === 0 ? 1 : 0;
+    document.getElementById('ft' + teamIdx).classList.add('winner');
+    document.getElementById('ft' + teamIdx).classList.remove('loser','tbd');
+    document.getElementById('ft' + loserIdx).classList.add('loser');
+    document.getElementById('ft' + loserIdx).classList.remove('winner','tbd');
+
+    resolved.champ = winner;
+    document.getElementById('trophySvg').classList.add('crowned');
+    var champLogoEl = document.getElementById('champLogo');
+    champLogoEl.src = winner.logo;
+    champLogoEl.alt = winner.name;
+    champLogoEl.classList.add('visible');
+    document.getElementById('champName').textContent = winner.name;
+    document.getElementById('champName').classList.add('active');
+    document.getElementById('formSection').classList.add('visible');
+    // Update final score prediction labels with actual finalist names
+    updateScorePredictionLabels();
+    setTimeout(function() {
+      document.getElementById('formSection').scrollIntoView({behavior:'smooth', block:'start'});
+    }, 200);
+  }
+  updateProgress();
+  updateHints();
+
+  // Track pick event
+  if (round === 'qf') {
+    var pickedTeam = picks.qf[matchIdx] !== null ? QF_TEAMS[matchIdx][picks.qf[matchIdx]].name : null;
+    ampTrack('QF Pick', { match: matchIdx, team: pickedTeam, action: pickedTeam ? 'select' : 'deselect' });
+  } else if (round === 'sf') {
+    var sfTeam = picks.sf[matchIdx] !== null && resolved.sf[matchIdx][picks.sf[matchIdx]]
+      ? resolved.sf[matchIdx][picks.sf[matchIdx]].name : null;
+    ampTrack('SF Pick', { match: matchIdx, team: sfTeam, action: sfTeam ? 'select' : 'deselect' });
+  } else if (round === 'final') {
+    var champTeam = resolved.champ ? resolved.champ.name : null;
+    ampTrack('Final Pick', { champion: champTeam, action: champTeam ? 'select' : 'deselect' });
+  }
+}
+
+function resetSF(matchIdx) {
+  picks.sf[matchIdx] = null;
+  document.getElementById('sf' + matchIdx + 't0').classList.remove('winner','loser');
+  document.getElementById('sf' + matchIdx + 't1').classList.remove('winner','loser');
+  resetFinal();
+}
+
+function propagateSF(matchIdx) {
+  if (picks.sf[matchIdx] !== null) {
+    resolved.final[matchIdx] = resolved.sf[matchIdx][picks.sf[matchIdx]];
+    setTeamSlot('ft' + matchIdx, 'ft' + matchIdx + '-name', resolved.final[matchIdx]);
+    propagateFinal();
+  }
+}
+
+function resetFinal() {
+  picks.final[0] = null;
+  resolved.champ = null;
+  document.getElementById('ft0').classList.remove('winner','loser');
+  document.getElementById('ft1').classList.remove('winner','loser');
+  document.getElementById('trophySvg').classList.remove('crowned');
+  var champLogoEl = document.getElementById('champLogo');
+  champLogoEl.classList.remove('visible');
+  champLogoEl.src = '';
+  document.getElementById('champName').textContent = '?';
+  document.getElementById('champName').classList.remove('active');
+  document.getElementById('formSection').classList.remove('visible');
+  document.getElementById('successMsg').classList.remove('visible');
+  updateProgress();
+}
+
+function propagateFinal() {
+  if (picks.final[0] !== null) {
+    const w = resolved.final[picks.final[0]];
+    if (w) {
+      resolved.champ = w;
+      document.getElementById('champName').textContent = w.name;
+    }
+  }
+}
+
+/* ── Save Predictions to Google Sheets ── */
+// 1. Create a Google Sheet
+// 2. Go to Extensions → Apps Script
+// 3. Paste the code from google-apps-script.js (see project root)
+// 4. Deploy → New deployment → Web app → Anyone can access
+// 5. Copy the URL and paste it below
+
+
+function updateScorePredictionLabels() {
+  var t0 = resolved.final[0];
+  var t1 = resolved.final[1];
+  var el0 = document.getElementById('spTeam0Label');
+  var el1 = document.getElementById('spTeam1Label');
+  if (t0) el0.innerHTML = '<img class="sp-team-logo" src="' + t0.logo + '" alt="">' + t0.name;
+  else el0.textContent = 'Finalist 1';
+  if (t1) el1.innerHTML = '<img class="sp-team-logo" src="' + t1.logo + '" alt="">' + t1.name;
+  else el1.textContent = 'Finalist 2';
+}
+
+function isBracketComplete() {
+  return picks.qf.every(function(p) { return p !== null; })
+      && picks.sf.every(function(p) { return p !== null; })
+      && picks.final[0] !== null;
+}
+
+function submitBracket() {
+  if (!isBracketComplete()) return;
+
+  var email = document.getElementById('inputEmail').value.trim();
+  var twitter = document.getElementById('inputTwitter').value.trim();
+  var hasEmail = email && email.includes('@');
+  var hasTwitter = twitter.length > 1;
+
+  if (!hasEmail && !hasTwitter) {
+    document.getElementById('inputEmail').style.borderColor = '#ff4d6d';
+    document.getElementById('inputTwitter').style.borderColor = '#ff4d6d';
+    setTimeout(function() {
+      document.getElementById('inputEmail').style.borderColor = '';
+      document.getElementById('inputTwitter').style.borderColor = '';
+    }, 1500);
+    return;
+  }
+  // Identify user and track submission
+  var cohort = localStorage.getItem('ucl_cohort') || null;
+  ampSetUserId(email, twitter);
+  ampIdentify(email, twitter);
+
+  // Persist cohort as user property alongside email/twitter
+  if (cohort) {
+    try {
+      var subIdentify = new amplitude.Identify();
+      subIdentify.setOnce('creator_code', cohort);
+      subIdentify.setOnce('creator_name', CREATOR_DATA[cohort] ? CREATOR_DATA[cohort].name : cohort);
+      subIdentify.set('bracket_submitted', true);
+      amplitude.identify(subIdentify);
+    } catch(e) {}
+  }
+
+  var bracket = getBracketState();
+
+  // Capture final score prediction
+  var score0 = document.getElementById('inputScore0').value.trim();
+  var score1 = document.getElementById('inputScore1').value.trim();
+  var predictedScore = (score0 !== '' && score1 !== '')
+    ? { home: parseInt(score0), away: parseInt(score1) }
+    : null;
+
+  ampTrack('Bracket Submitted', {
+    email: email || null,
+    twitter_handle: twitter || null,
+    creator_code: cohort,
+    creator_name: (cohort && CREATOR_DATA[cohort]) ? CREATOR_DATA[cohort].name : null,
+    champion: bracket.champion,
+    qf_pick_1: bracket.qf_picks[0],
+    qf_pick_2: bracket.qf_picks[1],
+    qf_pick_3: bracket.qf_picks[2],
+    qf_pick_4: bracket.qf_picks[3],
+    sf_pick_1: bracket.sf_picks[0],
+    sf_pick_2: bracket.sf_picks[1],
+    final_pick: bracket.final_pick,
+    predicted_score_home: predictedScore ? predictedScore.home : null,
+    predicted_score_away: predictedScore ? predictedScore.away : null
+  });
+
+  submitted = true;
+
+  // Save to localStorage so user can only predict once
+  localStorage.setItem('ucl_bracket_submitted', 'true');
+  localStorage.setItem('ucl_bracket_data', JSON.stringify({
+    picks: picks,
+    resolved: resolved,
+    email: email,
+    twitter: twitter,
+    predictedScore: predictedScore
+  }));
+
+  document.querySelectorAll('.form-group, .form-or, .form-notice, .picks-remaining, .score-prediction').forEach(function(el) { el.style.display = 'none'; });
+  document.querySelector('.submit-btn').style.display = 'none';
+  document.getElementById('successMsg').classList.add('visible');
+  document.getElementById('bracket').classList.add('locked');
+  setTimeout(generateShareImage, 800);
+}
+
+/* ── Share Image Generation ── */
+var shareCanvas = null;
+
+async function generateShareImage() {
+  var target = document.getElementById('bracketCapture');
+  var wrap = document.getElementById('shareScaleWrap');
+  var containerW = 1200;
+
+  // Enter capture mode
+  target.classList.add('capturing');
+  window.scrollTo(0, 0);
+
+  // Let layout settle so we can measure
+  await new Promise(function(r) { setTimeout(r, 100); });
+
+  // Measure the natural bracket width and compute scale
+  var naturalW = wrap.scrollWidth;
+  var scale = Math.min(1, (containerW - 40) / naturalW); // 40px horizontal padding
+  wrap.style.transform = 'scale(' + scale + ')';
+  wrap.style.transformOrigin = 'top center';
+  // Set wrapper height to scaled height so container wraps correctly
+  var naturalH = wrap.scrollHeight;
+  wrap.style.height = (naturalH * scale) + 'px';
+  wrap.style.overflow = 'visible';
+
+  // Let layout settle after scale
+  await new Promise(function(r) { setTimeout(r, 400); });
+
+  try {
+    shareCanvas = await html2canvas(target, {
+      backgroundColor: '#071064',
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      logging: false,
+      width: containerW,
+      height: target.scrollHeight,
+      scrollX: 0,
+      scrollY: 0,
+      windowWidth: containerW + 100,
+      windowHeight: target.scrollHeight + 200
+    });
+
+    var preview = document.getElementById('sharePreview');
+    preview.innerHTML = '';
+    var img = document.createElement('img');
+    img.src = shareCanvas.toDataURL('image/png');
+    img.alt = 'My UCL Bracket';
+    preview.appendChild(img);
+  } catch(e) {
+    console.error('Share image generation failed:', e);
+  }
+
+  // Restore
+  wrap.style.transform = '';
+  wrap.style.height = '';
+  wrap.style.overflow = '';
+  target.classList.remove('capturing');
+}
+
+function downloadBracketImage() {
+  ampTrack('Share Action', { method: 'download_image', champion: resolved.champ ? resolved.champ.name : null });
+  if (!shareCanvas) {
+    generateShareImage().then(function() {
+      if (shareCanvas) doDownload();
+    });
+    return;
+  }
+  doDownload();
+}
+
+function doDownload() {
+  try {
+    // Method 1: toBlob + object URL
+    shareCanvas.toBlob(function(blob) {
+      if (!blob) { doDownloadFallback(); return; }
+      var url = URL.createObjectURL(blob);
+      var link = document.createElement('a');
+      link.style.display = 'none';
+      link.download = 'my-ucl-bracket.png';
+      link.href = url;
+      document.body.appendChild(link);
+      link.click();
+      setTimeout(function() {
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }, 500);
+    }, 'image/png');
+  } catch(e) {
+    doDownloadFallback();
+  }
+}
+
+function doDownloadFallback() {
+  // Method 2: data URL
+  try {
+    var dataUrl = shareCanvas.toDataURL('image/png');
+    var link = document.createElement('a');
+    link.style.display = 'none';
+    link.download = 'my-ucl-bracket.png';
+    link.href = dataUrl;
+    document.body.appendChild(link);
+    link.click();
+    setTimeout(function() { document.body.removeChild(link); }, 500);
+  } catch(e) {
+    // Method 3: open in new tab
+    var dataUrl = shareCanvas.toDataURL('image/png');
+    var win = window.open();
+    win.document.write('<img src="' + dataUrl + '" style="max-width:100%">');
+    win.document.title = 'My UCL Bracket - Right click to save';
+  }
+}
+
+async function copyBracketToClipboard() {
+  ampTrack('Share Action', { method: 'copy_image', champion: resolved.champ ? resolved.champ.name : null });
+  if (!shareCanvas) return;
+  try {
+    var blob = await new Promise(function(resolve) { shareCanvas.toBlob(resolve, 'image/png'); });
+    await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+    var btn = document.querySelector('.btn-share-copy');
+    var orig = btn.innerHTML;
+    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+    setTimeout(function() { btn.innerHTML = orig; }, 2000);
+  } catch(e) {
+    downloadBracketImage();
+  }
+}
+
+function shareOnTwitter() {
+  ampTrack('Share Action', { method: 'twitter', champion: resolved.champ ? resolved.champ.name : null });
+  var champ = resolved.champ ? resolved.champ.name : '';
+  var text = 'My UCL Bracket prediction \uD83C\uDFC6\n\nChampion: ' + champ + '\n\nThink you can do better? Make your picks!\n\n#UCL #ChampionsLeague #BracketChallenge';
+  window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
+}
+
+/* ── Rules toggle ── */
+function toggleRules() {
+  var btn = document.getElementById('rulesToggle');
+  var body = document.getElementById('rulesBody');
+  btn.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
+/* ── Leaderboard ── */
+var DEMO_LEADERBOARD = [];
+
+function renderLeaderboard() {
+  var container = document.getElementById('lbRows');
+  if (DEMO_LEADERBOARD.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:32px 0;color:var(--text-dim);font-size:13px;">No entries yet. Be the first to submit your bracket!</div>';
+    return;
+  }
+  var html = '';
+  var medals = ['\uD83E\uDD47', '\uD83E\uDD48', '\uD83E\uDD49'];
+  DEMO_LEADERBOARD.forEach(function(p, i) {
+    var isTop3 = i < 3;
+    var rankDisplay = isTop3
+      ? '<span class="lb-rank-medal">' + medals[i] + '</span>'
+      : (i + 1);
+    var initials = p.name.split(' ').map(function(w) { return w[0]; }).join('');
+    var pnlSign = p.pnl >= 0 ? '+' : '';
+    var pnlClass = p.pnl >= 0 ? 'positive' : 'negative';
+    html += '<div class="lb-row' + (isTop3 ? ' top3' : '') + '">'
+      + '<div class="lb-rank">' + rankDisplay + '</div>'
+      + '<div class="lb-player">'
+      + '  <div class="lb-avatar">' + initials + '</div>'
+      + '  <div><div class="lb-player-name">' + p.name + '</div>'
+      + '  <div class="lb-player-handle">' + p.handle + '</div></div>'
+      + '</div>'
+      + '<div class="lb-champ-pick">'
+      + '  <img class="lb-champ-logo" src="' + p.logo + '" alt="">'
+      + '  <span class="lb-champ-text">' + p.champ + '</span>'
+      + '</div>'
+      + '<div class="lb-score">' + p.score + '/10</div>'
+      + '<div class="lb-pnl ' + pnlClass + '">' + pnlSign + '$' + Math.abs(p.pnl) + '</div>'
+      + '</div>';
+  });
+  container.innerHTML = html;
+}
+
+renderLeaderboard();
+
+/* ── Creator Landing Flow ── */
+function resolveCreatorBracket(cp) {
+  var b = { qfWinners: [], sfMatches: [], finalMatch: null, champ: null };
+  for (var i = 0; i < 4; i++) b.qfWinners.push(QF_TEAMS[i][cp.qf[i]]);
+  var sfTeams = [[b.qfWinners[0], b.qfWinners[1]], [b.qfWinners[2], b.qfWinners[3]]];
+  for (var i = 0; i < 2; i++) b.sfMatches.push({ teams: sfTeams[i], winner: sfTeams[i][cp.sf[i]] });
+  var fTeams = [b.sfMatches[0].winner, b.sfMatches[1].winner];
+  b.finalMatch = { teams: fTeams, winner: fTeams[cp.final[0]] };
+  b.champ = b.finalMatch.winner;
+  return b;
+}
+
+function renderCreatorPreview(bracket) {
+  var h = '';
+  // QF
+  h += '<div class="cl-round-label">Quarter-Finals</div>';
+  for (var i = 0; i < 4; i++) {
+    var t0 = QF_TEAMS[i][0], t1 = QF_TEAMS[i][1], w = bracket.qfWinners[i];
+    h += '<div class="cl-match">'
+      + '<div class="cl-team ' + (w.name === t0.name ? 'cl-winner' : 'cl-loser') + '"><img class="cl-team-logo" src="' + t0.logo + '" alt=""><span class="cl-team-name">' + t0.name + '</span></div>'
+      + '<span class="cl-vs">vs</span>'
+      + '<div class="cl-team ' + (w.name === t1.name ? 'cl-winner' : 'cl-loser') + '"><img class="cl-team-logo" src="' + t1.logo + '" alt=""><span class="cl-team-name">' + t1.name + '</span></div>'
+      + '</div>';
+  }
+  // SF
+  h += '<div class="cl-round-label">Semi-Finals</div>';
+  for (var i = 0; i < 2; i++) {
+    var sf = bracket.sfMatches[i];
+    h += '<div class="cl-match">'
+      + '<div class="cl-team ' + (sf.winner.name === sf.teams[0].name ? 'cl-winner' : 'cl-loser') + '"><img class="cl-team-logo" src="' + sf.teams[0].logo + '" alt=""><span class="cl-team-name">' + sf.teams[0].name + '</span></div>'
+      + '<span class="cl-vs">vs</span>'
+      + '<div class="cl-team ' + (sf.winner.name === sf.teams[1].name ? 'cl-winner' : 'cl-loser') + '"><img class="cl-team-logo" src="' + sf.teams[1].logo + '" alt=""><span class="cl-team-name">' + sf.teams[1].name + '</span></div>'
+      + '</div>';
+  }
+  // Final
+  h += '<div class="cl-round-label">Final</div>';
+  var f = bracket.finalMatch;
+  h += '<div class="cl-match">'
+    + '<div class="cl-team ' + (f.winner.name === f.teams[0].name ? 'cl-winner' : 'cl-loser') + '"><img class="cl-team-logo" src="' + f.teams[0].logo + '" alt=""><span class="cl-team-name">' + f.teams[0].name + '</span></div>'
+    + '<span class="cl-vs">vs</span>'
+    + '<div class="cl-team ' + (f.winner.name === f.teams[1].name ? 'cl-winner' : 'cl-loser') + '"><img class="cl-team-logo" src="' + f.teams[1].logo + '" alt=""><span class="cl-team-name">' + f.teams[1].name + '</span></div>'
+    + '</div>';
+  // Champion
+  h += '<div class="cl-champ"><div class="cl-champ-label">\uD83C\uDFC6 Champion Pick</div>'
+    + '<div class="cl-champ-team"><img class="cl-champ-logo" src="' + bracket.champ.logo + '" alt=""><span class="cl-champ-name">' + bracket.champ.name + '</span></div></div>';
+  document.getElementById('clBracket').innerHTML = h;
+}
+
+function initCreatorLanding() {
+  var params = new URLSearchParams(window.location.search);
+  var code = (params.get('creator') || '').toUpperCase();
+  if (!code || !CREATOR_DATA[code]) return false;
+  if (localStorage.getItem('ucl_bracket_submitted') === 'true') return false;
+
+  activeCreator = CREATOR_DATA[code];
+  activeCreator.code = code;
+
+  // Register cohort immediately — persists as user property for all future events
+  localStorage.setItem('ucl_cohort', code);
+  try {
+    var cohortIdentify = new amplitude.Identify();
+    cohortIdentify.setOnce('creator_code', code);
+    cohortIdentify.setOnce('creator_name', activeCreator.name);
+    cohortIdentify.setOnce('entry_type', 'creator_link');
+    cohortIdentify.setOnce('cohort_joined_at', new Date().toISOString());
+    amplitude.identify(cohortIdentify);
+  } catch(e) {}
+  ampTrack('Creator Landing Viewed', { creator: activeCreator.name, creator_code: code });
+
+  // Populate overlay
+  document.getElementById('clAvatar').textContent = activeCreator.initials;
+  document.getElementById('clName').textContent = activeCreator.name;
+  document.getElementById('clNameCopy').textContent = activeCreator.first;
+  document.getElementById('clNameFine').textContent = activeCreator.name;
+  renderCreatorPreview(resolveCreatorBracket(activeCreator.picks));
+  document.getElementById('creatorLanding').classList.remove('hidden');
+  return true;
+}
+
+function startOwnBracket() {
+  if (activeCreator) ampTrack('Creator CTA', { action: 'fill_own', creator: activeCreator.name, creator_code: activeCreator.code });
+  document.getElementById('creatorLanding').classList.add('hidden');
+}
+
+function copyCreatorPicks() {
+  if (!activeCreator) return;
+  ampTrack('Creator CTA', { action: 'copy_picks', creator: activeCreator.name, creator_code: activeCreator.code });
+  document.getElementById('creatorLanding').classList.add('hidden');
+
+  // Replay the creator's picks onto the bracket
+  var cp = activeCreator.picks;
+  for (var m = 0; m < 4; m++) pick('qf', m, cp.qf[m]);
+  for (var s = 0; s < 2; s++) pick('sf', s, cp.sf[s]);
+  pick('final', 0, cp.final[0]);
+}
+
+// Try creator landing before restoring a saved bracket
+initCreatorLanding();
+
+// ── Restore submitted bracket from localStorage ──
+(function restoreBracket() {
+  if (localStorage.getItem('ucl_bracket_submitted') !== 'true') {
+    updateProgress();
+    return;
+  }
+
+  try {
+    var saved = JSON.parse(localStorage.getItem('ucl_bracket_data'));
+    if (!saved) { updateProgress(); return; }
+
+    // Replay all QF picks
+    for (var m = 0; m < 4; m++) {
+      if (saved.picks.qf[m] !== null) pick('qf', m, saved.picks.qf[m]);
+    }
+    // Replay SF picks
+    for (var s = 0; s < 2; s++) {
+      if (saved.picks.sf[s] !== null) pick('sf', s, saved.picks.sf[s]);
+    }
+    // Replay final pick
+    if (saved.picks.final[0] !== null) pick('final', 0, saved.picks.final[0]);
+
+    // Lock the bracket
+    submitted = true;
+    document.getElementById('bracket').classList.add('locked');
+    document.getElementById('formSection').classList.add('visible');
+    document.querySelectorAll('.form-group, .form-or, .form-notice, .picks-remaining, .score-prediction').forEach(function(el) { el.style.display = 'none'; });
+    document.querySelector('.submit-btn').style.display = 'none';
+    document.getElementById('successMsg').classList.add('visible');
+
+    // Remove initial hints
+    clearHints();
+
+    setTimeout(generateShareImage, 800);
+  } catch(e) {
+    console.error('Restore failed:', e);
+  }
+
+  updateProgress();
+})();
+</script>
 </body>
 </html>

@@ -1,0 +1,35 @@
+function doGet(e) {
+  var p = e.parameter || {};
+
+  if (!p.email && !p.twitter) {
+    return ContentService.createTextOutput(JSON.stringify({status:"ok",message:"UCL Bracket API is running"})).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(["Timestamp","Email","Twitter","Champion","QF1 Winner","QF2 Winner","QF3 Winner","QF4 Winner","SF1 Winner","SF2 Winner","Final Winner"]);
+      sheet.getRange(1, 1, 1, 11).setFontWeight("bold");
+    }
+
+    sheet.appendRow([
+      p.timestamp || new Date().toISOString(),
+      p.email || "",
+      p.twitter || "",
+      p.champion || "",
+      p.qf1 || "",
+      p.qf2 || "",
+      p.qf3 || "",
+      p.qf4 || "",
+      p.sf1 || "",
+      p.sf2 || "",
+      p.final || ""
+    ]);
+
+    return ContentService.createTextOutput(JSON.stringify({status:"ok"})).setMimeType(ContentService.MimeType.JSON);
+
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({status:"error",message:error.toString()})).setMimeType(ContentService.MimeType.JSON);
+  }
+}
