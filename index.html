@@ -1946,7 +1946,7 @@ async function copyBracketToClipboard() {
 function shareOnTwitter() {
   ampTrack('Share Action', { method: 'twitter', champion: resolved.champ ? resolved.champ.name : null });
   var champ = resolved.champ ? resolved.champ.name : '';
-  var imgUrl = 'https://denystere.github.io/champions-league-predictions/logos/ucl_trophy_photo.jpg';
+  var imgUrl = 'https://uefa.limitless.exchange/logos/ucl_trophy_photo.jpg';
   var text = 'My UCL Bracket prediction \uD83C\uDFC6\n\nChampion: ' + champ + '\n\nThink you can do better? Make your picks!\n\n' + imgUrl + '\n\n#UCL #ChampionsLeague @TryLimitless';
   window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
 }
