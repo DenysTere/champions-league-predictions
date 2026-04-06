@@ -1948,32 +1948,16 @@ async function shareOnTwitter() {
   var champ = resolved.champ ? resolved.champ.name : '?';
   var text = 'My UCL Bracket prediction \uD83C\uDFC6\n\nChampion: ' + champ + '\n\nThink you can do better? Make your picks!\nhttps://uefa.limitless.exchange\n\n#UCL #ChampionsLeague @TryLimitless';
 
-  // Generate bracket image if not already done
+  // Copy bracket image to clipboard so user can paste into tweet
   if (!shareCanvas) await generateShareImage();
-
-  // Try Web Share API with image file
-  if (shareCanvas && navigator.canShare) {
-    try {
-      var blob = await new Promise(function(resolve) { shareCanvas.toBlob(resolve, 'image/png'); });
-      var file = new File([blob], 'my-ucl-bracket.png', { type: 'image/png' });
-      var shareData = { text: text, files: [file] };
-      if (navigator.canShare(shareData)) {
-        await navigator.share(shareData);
-        return;
-      }
-    } catch(e) {
-      if (e.name === 'AbortError') return; // user cancelled
-    }
-  }
-
-  // Fallback: copy image to clipboard, then open Twitter
   if (shareCanvas) {
     try {
       var blob = await new Promise(function(resolve) { shareCanvas.toBlob(resolve, 'image/png'); });
       await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
-      alert('Bracket image copied to clipboard! Paste it into your tweet.');
     } catch(e) {}
   }
+
+  // Open Twitter compose — image is on clipboard ready to paste
   window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
 }
 
