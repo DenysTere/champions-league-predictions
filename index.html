@@ -998,11 +998,147 @@
   .cl-fine {
     font-size: 11px; color: rgba(120,170,255,0.3);
   }
+
+  /* ═══ REFERRAL CODE MODAL ═══ */
+  .ref-modal {
+    position: fixed; inset: 0; z-index: 1200;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+    background: rgba(3, 10, 58, 0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .ref-modal.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .ref-card {
+    max-width: 420px; width: 100%;
+    background: linear-gradient(180deg, rgba(22,35,120,0.95), rgba(7,16,100,0.95));
+    border: 1px solid rgba(120,170,255,0.25);
+    border-radius: 18px;
+    padding: 32px 28px 28px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    transform: scale(0.95) translateY(8px);
+    opacity: 0;
+    transition: transform 320ms cubic-bezier(0.23, 1, 0.32, 1), opacity 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .ref-modal.visible .ref-card {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+  .ref-badge {
+    display: inline-block;
+    font-size: 9px; font-weight: 800; letter-spacing: 2.5px;
+    color: var(--gold);
+    background: rgba(251,191,36,0.1);
+    border: 1px solid rgba(251,191,36,0.3);
+    border-radius: 20px;
+    padding: 5px 12px;
+    margin-bottom: 18px;
+  }
+  .ref-title {
+    font-size: 22px; font-weight: 900;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .ref-sub {
+    font-size: 13px; color: var(--text-dim);
+    margin-bottom: 22px; line-height: 1.5;
+  }
+  .ref-input {
+    width: 100%;
+    padding: 14px 16px;
+    background: rgba(0,0,0,0.25);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 16px; font-weight: 700;
+    font-family: inherit;
+    text-align: center;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    outline: none;
+    transition: border-color 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .ref-input:focus { border-color: var(--cyan); }
+  .ref-input::placeholder {
+    color: rgba(120,170,255,0.3);
+    letter-spacing: 2px;
+    font-weight: 600;
+  }
+  .ref-error {
+    font-size: 11px; color: #ff6b8a;
+    margin-top: 10px; min-height: 14px;
+    opacity: 0;
+    transition: opacity 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .ref-error.visible { opacity: 1; }
+  .ref-buttons {
+    display: flex; flex-direction: column; gap: 10px;
+    margin-top: 18px;
+  }
+  .ref-btn-apply, .ref-btn-skip {
+    width: 100%; padding: 14px;
+    border-radius: 10px;
+    font-size: 14px; font-weight: 800;
+    font-family: inherit;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), background-color 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .ref-btn-apply {
+    background: linear-gradient(135deg, var(--cyan), #1e90ff);
+    color: #041133;
+    letter-spacing: 0.5px;
+  }
+  .ref-btn-skip {
+    background: transparent;
+    color: var(--text-dim);
+    border-color: var(--border);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .ref-btn-skip:hover { color: var(--text); border-color: var(--border-act); }
+  }
+  .ref-btn-apply:active, .ref-btn-skip:active {
+    transform: scale(0.97);
+  }
+  .ref-fine {
+    font-size: 10px; color: rgba(120,170,255,0.35);
+    margin-top: 14px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ref-modal, .ref-card, .ref-btn-apply, .ref-btn-skip, .ref-input, .ref-error {
+      transition: none !important;
+    }
+    .ref-card { transform: none; }
+  }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdn.amplitude.com/libs/analytics-browser-2.11.1-min.js.gz"></script>
 </head>
 <body>
+
+<!-- ══ Referral Code Modal ══ -->
+<div class="ref-modal" id="refModal" role="dialog" aria-modal="true" aria-labelledby="refTitle">
+  <div class="ref-card">
+    <div class="ref-badge">REFERRAL CODE</div>
+    <h2 class="ref-title" id="refTitle">Got a referral code?</h2>
+    <p class="ref-sub">Enter the code you got from a creator to get credit for their cohort.</p>
+    <input type="text" class="ref-input" id="refInput" placeholder="ENTER CODE" maxlength="20" autocomplete="off" spellcheck="false"/>
+    <div class="ref-error" id="refError">Code not recognized. Check and try again.</div>
+    <div class="ref-buttons">
+      <button class="ref-btn-apply" onclick="applyReferralCode()">Apply Code</button>
+      <button class="ref-btn-skip" onclick="skipReferralCode()">I don't have one</button>
+    </div>
+    <div class="ref-fine">You can still join without a code.</div>
+  </div>
+</div>
 
 <!-- ══ Starball Backgrounds ══ -->
 <svg class="starball-bg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
@@ -1260,7 +1396,7 @@
           <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
           <path d="M10 6v5M10 13.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
-        <span>Use the email or Twitter/X you'll sign up to <strong>Limitless</strong> with &mdash; we'll use it to identify your account and track your bracket.</span>
+        <span>Use the email, Twitter/X, or smart wallet address you'll use on <strong>Limitless</strong> &mdash; we'll use it to identify your account and track your bracket.</span>
       </div>
 
       <div class="form-group">
@@ -1277,6 +1413,16 @@
         <label>Twitter / X Handle</label>
         <input type="text" id="inputTwitter" placeholder="@yourhandle"/>
         <span class="field-hint">Your Twitter/X linked to your Limitless account</span>
+      </div>
+      <div class="form-or">
+        <span class="form-or-line"></span>
+        <span class="form-or-text">or</span>
+        <span class="form-or-line"></span>
+      </div>
+      <div class="form-group">
+        <label>Smart Wallet Address</label>
+        <input type="text" id="inputWallet" placeholder="0x..." autocomplete="off" spellcheck="false"/>
+        <span class="field-hint">Your Limitless smart wallet address (0x + 40 hex characters)</span>
       </div>
       <div class="score-prediction" id="scorePrediction">
         <h3>Predict the Final Score</h3>
@@ -1383,21 +1529,26 @@ function ampTrack(event, props) {
   try { amplitude.track(event, props); } catch(e) {}
 }
 
-function ampIdentify(email, twitter) {
+function ampIdentify(email, twitter, wallet) {
   try {
     var identify = new amplitude.Identify();
     if (email) identify.set('email', email);
     if (twitter) identify.set('twitter_handle', twitter);
+    if (wallet) identify.set('smart_wallet', wallet);
     identify.set('last_active', new Date().toISOString());
     amplitude.identify(identify);
   } catch(e) {}
 }
 
-function ampSetUserId(email, twitter) {
+function ampSetUserId(email, twitter, wallet) {
   try {
-    var userId = email || twitter;
+    var userId = email || twitter || wallet;
     if (userId) amplitude.setUserId(userId);
   } catch(e) {}
+}
+
+function isValidWallet(addr) {
+  return /^0x[a-fA-F0-9]{40}$/.test(addr || '');
 }
 
 // Helper: get full bracket state for event properties
@@ -1745,22 +1896,35 @@ function submitBracket() {
 
   var email = document.getElementById('inputEmail').value.trim();
   var twitter = document.getElementById('inputTwitter').value.trim();
+  var wallet = document.getElementById('inputWallet').value.trim();
   var hasEmail = email && email.includes('@');
   var hasTwitter = twitter.length > 1;
+  var hasWallet = isValidWallet(wallet);
 
-  if (!hasEmail && !hasTwitter) {
+  // If wallet was typed but invalid, flag just that field
+  if (wallet && !hasWallet) {
+    document.getElementById('inputWallet').style.borderColor = '#ff4d6d';
+    setTimeout(function() {
+      document.getElementById('inputWallet').style.borderColor = '';
+    }, 1500);
+    return;
+  }
+
+  if (!hasEmail && !hasTwitter && !hasWallet) {
     document.getElementById('inputEmail').style.borderColor = '#ff4d6d';
     document.getElementById('inputTwitter').style.borderColor = '#ff4d6d';
+    document.getElementById('inputWallet').style.borderColor = '#ff4d6d';
     setTimeout(function() {
       document.getElementById('inputEmail').style.borderColor = '';
       document.getElementById('inputTwitter').style.borderColor = '';
+      document.getElementById('inputWallet').style.borderColor = '';
     }, 1500);
     return;
   }
   // Identify user and track submission
   var cohort = localStorage.getItem('ucl_cohort') || null;
-  ampSetUserId(email, twitter);
-  ampIdentify(email, twitter);
+  ampSetUserId(email, twitter, hasWallet ? wallet : null);
+  ampIdentify(email, twitter, hasWallet ? wallet : null);
 
   // Persist cohort as user property alongside email/twitter
   if (cohort) {
@@ -1785,6 +1949,7 @@ function submitBracket() {
   ampTrack('Bracket Submitted', {
     email: email || null,
     twitter_handle: twitter || null,
+    smart_wallet: hasWallet ? wallet : null,
     creator_code: cohort,
     creator_name: (cohort && CREATOR_DATA[cohort]) ? CREATOR_DATA[cohort].name : null,
     champion: bracket.champion,
@@ -1808,6 +1973,7 @@ function submitBracket() {
     resolved: resolved,
     email: email,
     twitter: twitter,
+    wallet: hasWallet ? wallet : '',
     predictedScore: predictedScore
   }));
 
@@ -2107,8 +2273,96 @@ function copyCreatorPicks() {
   pick('final', 0, cp.final[0]);
 }
 
+// ── Referral code modal ──
+function showReferralModal() {
+  var modal = document.getElementById('refModal');
+  if (!modal) return;
+  modal.classList.add('visible');
+  ampTrack('Referral Modal Shown', {});
+  setTimeout(function() {
+    var inp = document.getElementById('refInput');
+    if (inp) inp.focus();
+  }, 320);
+}
+
+function hideReferralModal() {
+  var modal = document.getElementById('refModal');
+  if (modal) modal.classList.remove('visible');
+}
+
+function applyReferralCode() {
+  var inp = document.getElementById('refInput');
+  var err = document.getElementById('refError');
+  var code = (inp.value || '').trim().toUpperCase();
+  if (!code) {
+    inp.style.borderColor = '#ff4d6d';
+    setTimeout(function() { inp.style.borderColor = ''; }, 1200);
+    return;
+  }
+  if (!CREATOR_DATA[code]) {
+    err.classList.add('visible');
+    inp.style.borderColor = '#ff4d6d';
+    setTimeout(function() { inp.style.borderColor = ''; }, 1200);
+    ampTrack('Referral Code Invalid', { code_entered: code });
+    return;
+  }
+  err.classList.remove('visible');
+  localStorage.setItem('ucl_cohort', code);
+  try {
+    var refIdentify = new amplitude.Identify();
+    refIdentify.setOnce('creator_code', code);
+    refIdentify.setOnce('creator_name', CREATOR_DATA[code].name);
+    refIdentify.setOnce('entry_type', 'referral_popup');
+    refIdentify.setOnce('cohort_joined_at', new Date().toISOString());
+    amplitude.identify(refIdentify);
+  } catch(e) {}
+  ampTrack('Referral Code Applied', {
+    creator_code: code,
+    creator_name: CREATOR_DATA[code].name,
+    entry_type: 'referral_popup'
+  });
+  hideReferralModal();
+}
+
+function skipReferralCode() {
+  ampTrack('Referral Code Skipped', {});
+  hideReferralModal();
+  try { localStorage.setItem('ucl_ref_prompted', 'true'); } catch(e) {}
+}
+
+function maybeShowReferralModal() {
+  if (localStorage.getItem('ucl_cohort')) return;
+  if (localStorage.getItem('ucl_bracket_submitted') === 'true') return;
+  if (localStorage.getItem('ucl_ref_prompted') === 'true') return;
+  var params = new URLSearchParams(window.location.search);
+  if ((params.get('creator') || '').toUpperCase() && CREATOR_DATA[(params.get('creator') || '').toUpperCase()]) return;
+  setTimeout(showReferralModal, 600);
+}
+
+// Close on Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    var modal = document.getElementById('refModal');
+    if (modal && modal.classList.contains('visible')) skipReferralCode();
+  }
+});
+
+// Submit on Enter inside input
+(function() {
+  var inp = document.getElementById('refInput');
+  if (inp) {
+    inp.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') applyReferralCode();
+    });
+    inp.addEventListener('input', function() {
+      document.getElementById('refError').classList.remove('visible');
+    });
+  }
+})();
+
 // Try creator landing before restoring a saved bracket
-initCreatorLanding();
+var _hadCreatorLanding = initCreatorLanding();
+if (!_hadCreatorLanding) maybeShowReferralModal();
 
 // ── Restore submitted bracket from localStorage ──
 (function restoreBracket() {
