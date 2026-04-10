@@ -2225,9 +2225,7 @@ function renderCreatorPreview(bracket) {
   document.getElementById('clBracket').innerHTML = h;
 }
 
-function initCreatorLanding() {
-  var params = new URLSearchParams(window.location.search);
-  var code = (params.get('creator') || '').toUpperCase();
+function showCreatorLanding(code, entryType) {
   if (!code || !CREATOR_DATA[code]) return false;
   if (localStorage.getItem('ucl_bracket_submitted') === 'true') return false;
 
@@ -2240,11 +2238,15 @@ function initCreatorLanding() {
     var cohortIdentify = new amplitude.Identify();
     cohortIdentify.setOnce('creator_code', code);
     cohortIdentify.setOnce('creator_name', activeCreator.name);
-    cohortIdentify.setOnce('entry_type', 'creator_link');
+    cohortIdentify.setOnce('entry_type', entryType);
     cohortIdentify.setOnce('cohort_joined_at', new Date().toISOString());
     amplitude.identify(cohortIdentify);
   } catch(e) {}
-  ampTrack('Creator Landing Viewed', { creator: activeCreator.name, creator_code: code });
+  ampTrack('Creator Landing Viewed', {
+    creator: activeCreator.name,
+    creator_code: code,
+    entry_type: entryType
+  });
 
   // Populate overlay
   document.getElementById('clAvatar').textContent = activeCreator.initials;
@@ -2254,6 +2256,12 @@ function initCreatorLanding() {
   renderCreatorPreview(resolveCreatorBracket(activeCreator.picks));
   document.getElementById('creatorLanding').classList.remove('hidden');
   return true;
+}
+
+function initCreatorLanding() {
+  var params = new URLSearchParams(window.location.search);
+  var code = (params.get('creator') || '').toUpperCase();
+  return showCreatorLanding(code, 'creator_link');
 }
 
 function startOwnBracket() {
@@ -2307,21 +2315,14 @@ function applyReferralCode() {
     return;
   }
   err.classList.remove('visible');
-  localStorage.setItem('ucl_cohort', code);
-  try {
-    var refIdentify = new amplitude.Identify();
-    refIdentify.setOnce('creator_code', code);
-    refIdentify.setOnce('creator_name', CREATOR_DATA[code].name);
-    refIdentify.setOnce('entry_type', 'referral_popup');
-    refIdentify.setOnce('cohort_joined_at', new Date().toISOString());
-    amplitude.identify(refIdentify);
-  } catch(e) {}
   ampTrack('Referral Code Applied', {
     creator_code: code,
     creator_name: CREATOR_DATA[code].name,
     entry_type: 'referral_popup'
   });
   hideReferralModal();
+  // Same flow as ?creator=CODE — show creator landing overlay
+  showCreatorLanding(code, 'referral_popup');
 }
 
 function skipReferralCode() {
