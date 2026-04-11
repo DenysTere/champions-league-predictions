@@ -144,7 +144,10 @@
   }
   .trophy-svg {
     width: 120px; height: 150px;
-    object-fit: contain;
+    background-image: url('logos/ucl_trophy.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
     filter: drop-shadow(0 0 16px rgba(200,180,100,0.25));
     transition: filter .6s, transform .6s;
   }
@@ -1467,7 +1470,7 @@
   <div class="trophy-section">
     <div class="trophy-container">
       <div class="trophy-area">
-        <img class="trophy-svg" id="trophySvg" src="logos/ucl_trophy.svg" alt="UEFA Champions League Trophy">
+        <div class="trophy-svg" id="trophySvg" role="img" aria-label="UEFA Champions League Trophy"></div>
         <img class="champ-logo" id="champLogo" src="" alt="">
       </div>
       <div class="champ-label">YOUR CHAMPION</div>
