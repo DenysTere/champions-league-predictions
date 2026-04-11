@@ -193,8 +193,7 @@
   /* ── Round Labels ── */
   .round-labels {
     display: flex; justify-content: center; align-items: flex-end;
-    padding: 14px 16px 0;
-    max-width: 1060px; margin: 0 auto;
+    padding: 14px 0 0;
   }
   .round-label {
     text-align: center;
@@ -203,6 +202,7 @@
     padding-bottom: 8px;
     border-bottom: 1px solid rgba(120,170,255,0.12);
     transition: color .3s, border-color .3s;
+    flex-shrink: 0;
   }
   .round-label.active { color: var(--cyan); border-bottom-color: var(--cyan); }
   .rl-qf { width: 200px; }
@@ -1118,6 +1118,170 @@
     }
     .ref-card { transform: none; }
   }
+
+  /* ═══ MOBILE RESPONSIVE ═══ */
+  @media (max-width: 768px) {
+    .header { padding: 20px 16px 10px; }
+    .header p { font-size: 12px; padding: 0 8px; }
+    .prize-banner { padding: 12px 28px; margin-top: 10px; }
+
+    /* How it works — stack vertically */
+    .how-it-works {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 6px;
+      padding: 12px 20px 4px;
+      max-width: 360px;
+    }
+    .step { padding: 0; }
+    .step-text { white-space: normal; line-height: 1.4; }
+    .step-divider { display: none; }
+
+    /* Rules section */
+    .rules-section { padding: 0 16px; }
+
+    /* Trophy smaller */
+    .trophy-svg { width: 96px; height: 120px; }
+    .champ-logo { width: 42px; height: 42px; bottom: -6px; }
+    .champ-name { font-size: 17px; min-height: 22px; }
+
+    /* Bracket — shrink cells, connectors, and round labels proportionally */
+    .bracket-outer {
+      padding: 0 12px 24px;
+      -webkit-overflow-scrolling: touch;
+    }
+    /* Force the bracket to its natural content width so flex children
+       keep their explicit sizes instead of shrinking to fit the viewport */
+    .bracket {
+      min-width: 0;
+      width: max-content;
+      padding: 14px 0;
+    }
+    .bracket-half, .qf-col, .sf-col, .final-col, .qf-group { flex-shrink: 0; }
+
+    .qf-col, .sf-col { width: 130px; }
+    .final-col { width: 140px; }
+    .qf-group { height: 230px; }
+    .conn-merge { width: 26px; height: 230px; }
+    .conn-line { width: 26px; }
+
+    /* Round labels match new cell widths */
+    .round-labels {
+      padding: 14px 0 0;
+      width: max-content;
+    }
+    .rl-qf { width: 130px; }
+    .rl-sf { width: 130px; }
+    .rl-final { width: 140px; }
+    .rl-conn { width: 26px; }
+
+    /* Match cell sizing */
+    .team { padding: 11px 11px; gap: 8px; }
+    .team-logo, .team-logo-placeholder { width: 26px; height: 26px; }
+    .team-logo-placeholder { font-size: 11px; }
+    .team-name { font-size: 12px; }
+    .pick-dot { width: 6px; height: 6px; }
+    .team.winner::after { width: 16px; height: 16px; line-height: 16px; font-size: 12px; right: 8px; }
+    .right-side .team.winner::after { left: 6px; }
+
+    /* Form section */
+    .form-section { padding: 0 16px 50px; }
+    .form-card { padding: 22px 20px; border-radius: 14px; }
+    .form-card h2 { font-size: 17px; }
+
+    /* Score prediction */
+    .sp-input { width: 56px; font-size: 18px; padding: 9px 6px; }
+
+    /* Leaderboard */
+    .leaderboard-section { padding: 18px 14px 50px; }
+    .lb-card { padding: 18px 16px; border-radius: 14px; }
+    .lb-title { font-size: 17px; }
+    .lb-header-row { gap: 8px; }
+
+    /* Hide champion column on narrow screens to avoid horizontal scroll */
+    .lb-col-champ, .lb-champ-pick { display: none; }
+    .lb-col-pnl, .lb-pnl { width: 56px; font-size: 11px; }
+    .lb-col-score, .lb-score { width: 48px; font-size: 13px; }
+    .lb-col-rank, .lb-rank { width: 26px; }
+    .lb-table-head { padding: 0 4px 8px; font-size: 9px; }
+    .lb-row { padding: 9px 4px; }
+    .lb-avatar { width: 28px; height: 28px; font-size: 12px; }
+    .lb-player { gap: 8px; }
+    .lb-player-name { font-size: 12px; }
+    .lb-player-handle { font-size: 10px; }
+
+    /* Creator landing overlay */
+    .creator-landing { padding: 16px; align-items: flex-start; }
+    .cl-card { padding: 20px 0 32px; }
+    .cl-badge { font-size: 9px; margin-bottom: 18px; letter-spacing: 2px; }
+    .cl-avatar { width: 64px; height: 64px; font-size: 22px; margin-bottom: 14px; }
+    .cl-subtitle { font-size: 13px; margin-bottom: 20px; }
+    .cl-bracket { padding: 14px 12px; margin-bottom: 22px; }
+    .cl-cta { padding: 13px 20px; font-size: 14px; }
+
+    /* Referral modal */
+    .ref-modal { padding: 16px; }
+    .ref-card { padding: 26px 20px 22px; border-radius: 16px; }
+    .ref-title { font-size: 19px; }
+    .ref-sub { font-size: 12px; margin-bottom: 18px; }
+    .ref-input { padding: 13px 14px; font-size: 15px; }
+    .ref-btn-apply, .ref-btn-skip { padding: 13px; font-size: 13px; }
+  }
+
+  @media (max-width: 480px) {
+    .header { padding: 16px 14px 8px; }
+    .ucl-badge { padding: 5px 12px 5px 8px; margin-bottom: 10px; }
+    .ucl-label { font-size: 10px; letter-spacing: 2px; }
+    .prize-banner { padding: 10px 22px; }
+
+    .how-it-works { padding: 10px 18px 2px; }
+    .step-text { font-size: 10px; }
+
+    .trophy-svg { width: 84px; height: 104px; }
+    .champ-logo { width: 36px; height: 36px; padding: 4px; }
+    .champ-name { font-size: 16px; }
+
+    /* Round labels: smaller text on tiny screens */
+    .round-label { font-size: 8px; letter-spacing: 1.5px; padding-bottom: 6px; }
+
+    /* Bracket — even tighter for phones */
+    .bracket-outer { padding: 0 10px 20px; }
+    .bracket { padding: 12px 0; }
+    .qf-col, .sf-col { width: 108px; }
+    .final-col { width: 118px; }
+    .qf-group { height: 200px; }
+    .conn-merge { width: 22px; height: 200px; }
+    .conn-line { width: 22px; }
+    .rl-qf, .rl-sf { width: 108px; }
+    .rl-final { width: 118px; }
+    .rl-conn { width: 22px; }
+
+    .team { padding: 9px 9px; gap: 6px; }
+    .team-logo, .team-logo-placeholder { width: 22px; height: 22px; }
+    .team-logo-placeholder { font-size: 10px; }
+    .team-name { font-size: 11px; }
+
+    .form-card { padding: 18px 16px; }
+    .form-card h2 { font-size: 16px; }
+    .form-card p { font-size: 12px; }
+    .form-group input { padding: 11px 12px; font-size: 13px; }
+    .submit-btn { padding: 13px; font-size: 14px; }
+
+    .sp-input { width: 52px; font-size: 17px; }
+
+    .leaderboard-section { padding: 14px 10px 44px; }
+    .lb-card { padding: 16px 12px; }
+    .lb-tab { padding: 7px 8px; font-size: 11px; }
+
+    .creator-landing { padding: 14px; }
+    .cl-avatar { width: 60px; height: 60px; font-size: 20px; }
+    .cl-team-name { font-size: 10px; }
+    .cl-team-logo { width: 18px; height: 18px; }
+
+    .ref-modal { padding: 14px; }
+    .ref-card { padding: 24px 18px 20px; }
+    .ref-title { font-size: 18px; }
+  }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdn.amplitude.com/libs/analytics-browser-2.11.1-min.js.gz"></script>
@@ -1275,21 +1439,22 @@
     </div>
   </div>
 
-  <!-- ══ Round Labels ══ -->
-  <div class="round-labels">
-    <div class="round-label rl-qf active" id="lbl-qf-l">Quarter-Finals</div>
-    <div class="round-label rl-conn">&nbsp;</div>
-    <div class="round-label rl-sf" id="lbl-sf-l">Semi-Finals</div>
-    <div class="round-label rl-conn">&nbsp;</div>
-    <div class="round-label rl-final" id="lbl-f">Final</div>
-    <div class="round-label rl-conn">&nbsp;</div>
-    <div class="round-label rl-sf" id="lbl-sf-r">Semi-Finals</div>
-    <div class="round-label rl-conn">&nbsp;</div>
-    <div class="round-label rl-qf" id="lbl-qf-r">Quarter-Finals</div>
-  </div>
-
   <!-- ══ Bracket ══ -->
   <div class="bracket-outer">
+
+    <!-- ══ Round Labels — inside bracket-outer so they scroll with the bracket ══ -->
+    <div class="round-labels">
+      <div class="round-label rl-qf active" id="lbl-qf-l">Quarter-Finals</div>
+      <div class="round-label rl-conn">&nbsp;</div>
+      <div class="round-label rl-sf" id="lbl-sf-l">Semi-Finals</div>
+      <div class="round-label rl-conn">&nbsp;</div>
+      <div class="round-label rl-final" id="lbl-f">Final</div>
+      <div class="round-label rl-conn">&nbsp;</div>
+      <div class="round-label rl-sf" id="lbl-sf-r">Semi-Finals</div>
+      <div class="round-label rl-conn">&nbsp;</div>
+      <div class="round-label rl-qf" id="lbl-qf-r">Quarter-Finals</div>
+    </div>
+
     <div class="bracket" id="bracket">
 
       <!-- ── LEFT HALF ── -->
@@ -1308,7 +1473,7 @@
               <div class="team" id="qf1t1" onclick="pick('qf',1,1)"><img class="team-logo" src="logos/liverpool.png" alt="Liverpool"><span class="team-name">Liverpool</span><div class="pick-dot"></div></div>
             </div>
           </div>
-          <svg class="conn-merge" width="44" height="320" viewBox="0 0 44 320">
+          <svg class="conn-merge" width="44" height="320" viewBox="0 0 44 320" preserveAspectRatio="none">
             <path d="M0,62 H22 V160 H44" fill="none" stroke="var(--line)" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
             <path d="M0,258 H22 V160 H44" fill="none" stroke="var(--line)" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
           </svg>
@@ -1323,7 +1488,7 @@
         </div>
 
         <!-- Line to Final -->
-        <svg class="conn-line" width="44" height="4" viewBox="0 0 44 4">
+        <svg class="conn-line" width="44" height="4" viewBox="0 0 44 4" preserveAspectRatio="none">
           <line x1="0" y1="2" x2="44" y2="2" stroke="var(--line)" stroke-width="1.5"/>
         </svg>
       </div>
@@ -1340,7 +1505,7 @@
       <div class="bracket-half">
 
         <!-- Line from Final -->
-        <svg class="conn-line" width="44" height="4" viewBox="0 0 44 4">
+        <svg class="conn-line" width="44" height="4" viewBox="0 0 44 4" preserveAspectRatio="none">
           <line x1="0" y1="2" x2="44" y2="2" stroke="var(--line)" stroke-width="1.5"/>
         </svg>
 
@@ -1354,7 +1519,7 @@
 
         <!-- Right QF Group: merge connector + 2 matches -->
         <div class="qf-group">
-          <svg class="conn-merge" width="44" height="320" viewBox="0 0 44 320">
+          <svg class="conn-merge" width="44" height="320" viewBox="0 0 44 320" preserveAspectRatio="none">
             <path d="M44,62 H22 V160 H0" fill="none" stroke="var(--line)" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
             <path d="M44,258 H22 V160 H0" fill="none" stroke="var(--line)" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
           </svg>
