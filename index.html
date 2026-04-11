@@ -704,7 +704,43 @@
     color: #fbbf24 !important;
   }
   #bracketCapture.capturing .team.winner::after { display: none !important; }
-  #bracketCapture.capturing .bracket-outer { overflow: visible; }
+  #bracketCapture.capturing .bracket-outer { overflow: visible; padding: 0 16px 30px; }
+
+  /* Force desktop bracket sizing during capture so the share image
+     renders identically on any device (overrides mobile media queries
+     because these selectors carry higher specificity) */
+  #bracketCapture.capturing .bracket {
+    min-width: 960px; width: auto; padding: 20px 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #bracketCapture.capturing .qf-col,
+  #bracketCapture.capturing .sf-col { width: 200px; }
+  #bracketCapture.capturing .final-col { width: 210px; }
+  #bracketCapture.capturing .qf-group { height: 320px; }
+  #bracketCapture.capturing .conn-merge { width: 44px; height: 320px; }
+  #bracketCapture.capturing .conn-line { width: 44px; height: 4px; }
+  #bracketCapture.capturing .round-labels { padding: 14px 0 0; width: auto; }
+  #bracketCapture.capturing .rl-qf,
+  #bracketCapture.capturing .rl-sf { width: 200px; }
+  #bracketCapture.capturing .rl-final { width: 210px; }
+  #bracketCapture.capturing .rl-conn { width: 44px; }
+  #bracketCapture.capturing .round-label {
+    font-size: 9px; letter-spacing: 2px; padding-bottom: 8px;
+  }
+  #bracketCapture.capturing .team { padding: 14px 14px; gap: 10px; }
+  #bracketCapture.capturing .team-logo,
+  #bracketCapture.capturing .team-logo-placeholder { width: 32px; height: 32px; }
+  #bracketCapture.capturing .team-logo-placeholder { font-size: 12px; }
+  #bracketCapture.capturing .team-name { font-size: 14px; }
+  #bracketCapture.capturing .pick-dot { width: 8px; height: 8px; }
+  #bracketCapture.capturing .trophy-svg { width: 120px; height: 150px; }
+  #bracketCapture.capturing .champ-logo {
+    width: 52px; height: 52px; bottom: -8px; padding: 6px;
+  }
+  #bracketCapture.capturing .champ-name { font-size: 20px; min-height: 26px; }
+  /* Restore right-side mirroring for the SVG cross marks (hidden anyway) */
+  #bracketCapture.capturing .right-side .team { flex-direction: row-reverse; }
+  #bracketCapture.capturing .right-side .team-name { text-align: right; }
 
   /* ═══ RULES ═══ */
   .rules-section {
